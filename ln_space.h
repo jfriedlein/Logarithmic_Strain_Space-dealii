@@ -17,6 +17,37 @@ using namespace dealii;
 
 namespace ln_space
 {
+//	template<int dim>
+//	void transform (  /*input->*/ Tensor<2, dim> &F, double &alpha_n, SymmetricTensor<2,dim> &eps_p_n, void (*func_pointer)(auto),
+//			 	 	  /*output->*/ SymmetricTensor<2,dim> &stress_S, SymmetricTensor<4,dim> &C, SymmetricTensor<4,dim> &Lambda, double &stress_vM )
+//	{
+//		 Vector<double> eigenvalues(dim);
+//		 std::vector< Tensor<1, dim> > eigenvector(dim);
+//		 std::vector< SymmetricTensor<2, dim> > eigenbasis(dim);
+//		 Vector<double> ea(dim);
+//		 Vector<double> da(dim);
+//		 Vector<double> fa(dim);
+//		 SymmetricTensor<2, dim> hencky_strain;
+//
+//		 pre_ln ( /*input->*/ F,
+//				  /*output->*/ hencky_strain, ea, da, fa, eigenvector, eigenvalues, eigenbasis );
+//
+//		 // We only create this variable to emphasise the difference between the stress \a T from the
+//		 // small strain material modell and the 2nd Piola Kirchhoff stress \a S transformed back by the post processing
+//		  SymmetricTensor<2,dim> T_stress;
+//
+//		 func_pointer( /*input->*/ hencky_strain, alpha_n, eps_p_n, /*output->*/ T_stress, stress_vM, C, Lambda );
+//
+//		 // ToDo: We also have to transform Lambda, stress_vM
+//
+//		 // also transforms the T_stress to the 2nd Piola-Kirchhoff stress
+//		  post_ln ( /*input->*/ ea, da, fa, eigenvalues, eigenbasis,
+//				 				  /*output->*/ T_stress, C );
+//
+//		 stress_S = T_stress;
+//	}
+
+
 	template<int dim>
 	void pre_ln ( 	/*input->*/ Tensor<2, dim> &F, 
 					/*output->*/ SymmetricTensor<2,dim> &hencky_strain, Vector<double> &ea, Vector<double> &da, Vector<double> &fa,
