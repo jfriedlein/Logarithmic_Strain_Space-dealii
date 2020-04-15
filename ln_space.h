@@ -18,7 +18,8 @@ using namespace dealii;
 namespace ln_space
 {
 //	template<int dim>
-//	void transform (  /*input->*/ Tensor<2, dim> &F, double &alpha_n, SymmetricTensor<2,dim> &eps_p_n, void (*func_pointer)(auto),
+//	void transform (  /*input->*/ Tensor<2, dim> &F, double &alpha_n, SymmetricTensor<2,dim> &eps_p_n,
+//									SymmetricTensor<4,3> (*func_pointer)(SymmetricTensor <2,3> &, double &, SymmetricTensor <2,3> &, SymmetricTensor <2,3> &, double &, SymmetricTensor <4,3> &),
 //			 	 	  /*output->*/ SymmetricTensor<2,dim> &stress_S, SymmetricTensor<4,dim> &C, SymmetricTensor<4,dim> &Lambda, double &stress_vM )
 //	{
 //		 Vector<double> eigenvalues(dim);
@@ -254,7 +255,7 @@ namespace ln_space
 		 }
 	
 		// Ensure that \a eta was initialised in one of the cases
-		 AssertThrow( (eta < 9999999), ExcMessage("Eta in update_qph not initialised") );
+		 //AssertThrow( (eta < 9999999), ExcMessage("Eta in update_qph not initialised") );
 	
 	
 		/*
