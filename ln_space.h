@@ -19,7 +19,6 @@
 
 using namespace dealii;
 
-//namespace ln_space
 template <int dim>
 class ln_space
 {
@@ -29,7 +28,7 @@ class ln_space
 	SymmetricTensor<2,dim> hencky_strain; // only dim components
 	SymmetricTensor<2,3> hencky_strain_3D; // full 3D components
 
-	// Extract dim components from 3D quantities
+	// Contain dim components from the 3D quantities
 	 SymmetricTensor<2,dim> second_piola_stress_S;
 	 SymmetricTensor<4,dim> C;
 
@@ -49,6 +48,8 @@ class ln_space
   	 Vector<double> ea;
   	 Vector<double> da;
   	 Vector<double> fa;
+
+ 	const double comp_tolerance = 1e-8;
 };
 
 
@@ -65,11 +66,18 @@ fa(3)
 }
 
 
+// @section 3D Tranformation for 3D
+/*
+ * #################################################################### 3D ##############################################################
+ */
+
 // 3D
 template<>
 void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, eigenvalues, eigenvector, eigenbasis, ea, da, fa*/ )
 {
-	// Following "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors" by Miehe&Lambrecht \n
+	// Following
+	// "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors"
+	// by Miehe&Lambrecht \n
 	// Table I. Algorithm A
 	/*
 	 * 1. Eigenvalues, eigenvalue bases and diagonal functions:
@@ -116,7 +124,8 @@ void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, e
 		Assert( ea(i) == ea(i),
 					 ExcMessage( "ln-space<< Ea is nan due to logarithm of negativ eigenvalue. Check update_qph.") );
 		Assert( da(i) > 0.0,
-					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 . Check update_qph.") );
+					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 ."
+							 	 "Check update_qph.") );
 	 }
 
 	// Compute the Hencky strain
@@ -126,18 +135,17 @@ void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, e
 	 hencky_strain = hencky_strain_3D;
 
 	// Output-> SymmetricTensor<2, dim> hencky_strain, Vector<double> ea, da, fa,
-	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues, std::vector< SymmetricTensor<2, dim> > eigenbasis
+	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues,
+	//			std::vector< SymmetricTensor<2, dim> > eigenbasis
 }
 
 
 
 // 3D
 template<>
-void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent	)
+void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent )
 {
 	// ToDo-clean: Only added the deformation gradient to differentiate between the 3D and truely 2D functions
-
-	const double comp_tolerance = 1e-8;
 
 	/*
 	 * 3. Set up coefficients \a theta, \a xi and \a eta
@@ -364,7 +372,7 @@ void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
 	  F[2][2] = 1.;
 
 	// Get the symmetric right cauchy green tensor and expand it to pseudo 3D
-	 SymmetricTensor<2,3> right_cauchy_green_sym = symmetrize( contract<1,0>(transpose(F),F) );//Physics::Elasticity::Kinematics::C(F);
+	 SymmetricTensor<2,3> right_cauchy_green_sym = symmetrize( contract<1,0>(transpose(F),F) );
 
 	// Compute Eigenvalues, Eigenvectors and Eigenbasis
 	 {
@@ -375,11 +383,12 @@ void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
 		 }
 
 		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
-		// shall belong to lambda_3, hence we search for the EW that equals C33 and move this to the end of the list of eigenvalues and eigenvectors
+		// shall belong to lambda_3, hence we search for the EW that equals C33
+		// and move this to the end of the list of eigenvalues and eigenvectors
 		 // ToDo-optimize: if we find the EW at i=2, we can leave it there, hence the loop could be limited to (i<2)
 		 // ToDo-optimize: Besides the following loop everything else is the same as for 3D maybe merge this
 		 for (unsigned int i = 0; i < 3; ++i)
-			 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2])<1e-10 )
+			 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2]) < comp_tolerance )
 			 {
 				 double tmp_EW = eigenvalues[2];
 				 eigenvalues[2] = eigenvalues[i]; // truely lambda_3
@@ -420,7 +429,8 @@ void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
 		Assert( ea(i) == ea(i),
 					 ExcMessage( "ln-space<< Ea is nan due to logarithm of negativ eigenvalue. Check update_qph.") );
 		Assert( da(i) > 0.0,
-					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 . Check update_qph.") );
+					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 ."
+							 	 "Check update_qph.") );
 	 }
 
 	// Compute the Hencky strain
@@ -430,16 +440,23 @@ void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
 	 hencky_strain = extract_dim<2> (hencky_strain_3D);
 
 	// Output-> SymmetricTensor<2, dim> hencky_strain, Vector<double> ea, da, fa,
-	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues, std::vector< SymmetricTensor<2, dim> > eigenbasis
+	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues,
+	//			std::vector< SymmetricTensor<2, dim> > eigenbasis
 }
 
+
+
+// @section 2D Tranformation for 2D
+/*
+ * #################################################################### 2D ##############################################################
+ */
+// One might think, that calling the 3D transformation with an expanded deformation gradient removes the need for a seperate 2D
+// transformation. But the 3D code seems to become singular for a plane strain deformation gradient.
 
 // 2D
 template<>
 void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent )
 {
-	const double comp_tolerance = 1e-8;
-
 	/*
 	 * 3. Set up coefficients \a theta, \a xi and \a eta
 	 */
@@ -542,7 +559,7 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 		 second_piola_stress_S = extract_dim<2> ( stress_S_3D );
 	 }
 	 {
-		 SymmetricTensor<4,3> C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym // Note: we work on the input argument \a elasto_plastic_tangent
+		 SymmetricTensor<4,3> C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
 									  + projection_tensor_T_doublecon_L_sym;
 		 C = extract_dim<2> ( C_3D );
 	 }

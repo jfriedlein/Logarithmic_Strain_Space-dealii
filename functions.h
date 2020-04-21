@@ -31,45 +31,41 @@ using namespace std;
 
 
 template<int dim>
-Tensor<4,dim> get_tensor_operator_G(const SymmetricTensor<2,dim> &Ma, const SymmetricTensor<2,dim> &Mb){
-
+Tensor<4,dim> get_tensor_operator_G(const SymmetricTensor<2,dim> &Ma, const SymmetricTensor<2,dim> &Mb)
+{
 	Tensor<4,dim> tmp;
 
-	for(unsigned int i=0; i<dim; ++i){
-		for(unsigned int j=0; j<dim; ++j){
-			for(unsigned int k=0; k<dim; ++k){
-				for(unsigned int l=0; l<dim; ++l){
+	for(unsigned int i=0; i<dim; ++i)
+		for(unsigned int j=0; j<dim; ++j)
+			for(unsigned int k=0; k<dim; ++k)
+				for(unsigned int l=0; l<dim; ++l)
 					tmp[i][j][k][l] = Ma[i][k] * Mb[j][l] + Ma[i][l] * Mb[j][k];
-				}
-			}
-		}
-	}
+
 	return tmp;
 }
+
 
 // F right F_{a(bc)}
 template<int dim>
 Tensor<4,dim> get_tensor_operator_F_right(const SymmetricTensor<2,dim> &Ma,
 										  const SymmetricTensor<2,dim> &Mb,
 										  const SymmetricTensor<2,dim> &Mc,
-										  const SymmetricTensor<2,dim> &T){
+										  const SymmetricTensor<2,dim> &T )
+{
 	Tensor<4,dim> tmp;
 
 	Tensor<2,dim> temp_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mc);
 	Tensor<2,dim> MbTMc = contract<1,0>((Tensor<2,dim>)Mb,temp_tensor);
 
-	for(unsigned int i=0; i<dim; ++i){
-		for(unsigned int j=0; j<dim; ++j){
-			for(unsigned int k=0; k<dim; ++k){
-				for(unsigned int l=0; l<dim; ++l){
+	for(unsigned int i=0; i<dim; ++i)
+		for(unsigned int j=0; j<dim; ++j)
+			for(unsigned int k=0; k<dim; ++k)
+				for(unsigned int l=0; l<dim; ++l)
 					tmp[i][j][k][l] = Ma[i][k] * MbTMc[j][l] + Ma[i][l] * MbTMc[j][k];
-				}
-			}
-		}
-	}
 
 	return tmp;
 }
+
 
 // F right F_{(ab)c}
 template<int dim>
@@ -82,15 +78,12 @@ Tensor<4,dim> get_tensor_operator_F_left(const SymmetricTensor<2,dim> &Ma,
 	Tensor<2,dim> temp_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mb);
 	Tensor<2,dim> MaTMb = contract<1,0>((Tensor<2,dim>)Ma,temp_tensor);
 
-	for(unsigned int i=0; i<dim; ++i){
-		for(unsigned int j=0; j<dim; ++j){
-			for(unsigned int k=0; k<dim; ++k){
-				for(unsigned int l=0; l<dim; ++l){
+	for(unsigned int i=0; i<dim; ++i)
+		for(unsigned int j=0; j<dim; ++j)
+			for(unsigned int k=0; k<dim; ++k)
+				for(unsigned int l=0; l<dim; ++l)
 					tmp[i][j][k][l] = MaTMb[i][k] * Mc[j][l] + MaTMb[i][l] * Mc[j][k];
-				}
-			}
-		}
-	}
+
 	return tmp;
 }
 
