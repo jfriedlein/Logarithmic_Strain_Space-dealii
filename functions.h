@@ -33,13 +33,17 @@ using namespace std;
 template<int dim>
 Tensor<4,dim> get_tensor_operator_G(const SymmetricTensor<2,dim> &Ma, const SymmetricTensor<2,dim> &Mb)
 {
-	Tensor<4,dim> tmp;
+	Tensor<4,dim> tmp; // has minor symmetry of indices k,l
 
 	for(unsigned int i=0; i<dim; ++i)
 		for(unsigned int j=0; j<dim; ++j)
 			for(unsigned int k=0; k<dim; ++k)
-				for(unsigned int l=0; l<dim; ++l)
-					tmp[i][j][k][l] = Ma[i][k] * Mb[j][l] + Ma[i][l] * Mb[j][k];
+				for(unsigned int l=k; l<dim; ++l)
+				{
+					double tmp_scalar = Ma[i][k] * Mb[j][l] + Ma[i][l] * Mb[j][k];
+					tmp[i][j][k][l] = tmp_scalar;
+					tmp[i][j][l][k] = tmp_scalar;
+				}
 
 	return tmp;
 }
@@ -52,7 +56,7 @@ Tensor<4,dim> get_tensor_operator_F_right(const SymmetricTensor<2,dim> &Ma,
 										  const SymmetricTensor<2,dim> &Mc,
 										  const SymmetricTensor<2,dim> &T )
 {
-	Tensor<4,dim> tmp;
+	Tensor<4,dim> tmp; // has minor symmetry of indices k,l
 
 	Tensor<2,dim> temp_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mc);
 	Tensor<2,dim> MbTMc = contract<1,0>((Tensor<2,dim>)Mb,temp_tensor);
@@ -60,8 +64,12 @@ Tensor<4,dim> get_tensor_operator_F_right(const SymmetricTensor<2,dim> &Ma,
 	for(unsigned int i=0; i<dim; ++i)
 		for(unsigned int j=0; j<dim; ++j)
 			for(unsigned int k=0; k<dim; ++k)
-				for(unsigned int l=0; l<dim; ++l)
-					tmp[i][j][k][l] = Ma[i][k] * MbTMc[j][l] + Ma[i][l] * MbTMc[j][k];
+				for(unsigned int l=k; l<dim; ++l)
+				{
+					double tmp_scalar = Ma[i][k] * MbTMc[j][l] + Ma[i][l] * MbTMc[j][k];
+					tmp[i][j][k][l] = tmp_scalar;
+					tmp[i][j][l][k] = tmp_scalar;
+				}
 
 	return tmp;
 }
@@ -81,8 +89,12 @@ Tensor<4,dim> get_tensor_operator_F_left(const SymmetricTensor<2,dim> &Ma,
 	for(unsigned int i=0; i<dim; ++i)
 		for(unsigned int j=0; j<dim; ++j)
 			for(unsigned int k=0; k<dim; ++k)
-				for(unsigned int l=0; l<dim; ++l)
-					tmp[i][j][k][l] = MaTMb[i][k] * Mc[j][l] + MaTMb[i][l] * Mc[j][k];
+				for(unsigned int l=k; l<dim; ++l)
+				{
+					double tmp_scalar = MaTMb[i][k] * Mc[j][l] + MaTMb[i][l] * Mc[j][k];
+					tmp[i][j][k][l] = tmp_scalar;
+					tmp[i][j][l][k] = tmp_scalar;
+				}
 
 	return tmp;
 }
