@@ -16,6 +16,7 @@
 #include "../MA-Code/auxiliary_functions/StandardTensors.h"
 #include "../MA-Code/auxiliary_functions/tensor_operators.h"
 #include "../MA-Code/auxiliary_functions/auxiliary_functions.h"
+#include "../MA-Code/handling_2D.h"
 
 using namespace dealii;
 
@@ -31,15 +32,19 @@ class ln_space
 	// Contain dim components from the 3D quantities
 	 SymmetricTensor<2,dim> second_piola_stress_S;
 	 SymmetricTensor<4,dim> C;
+	 SymmetricTensor<4,3> C_3D;
 
 	void pre_ln ( /*input->*/ Tensor<2,3> &F
 				  /*output->*/ );
 
-	void pre_ln ( /*input->*/ Tensor<2,2> &F_2D
-				  /*output->*/ );
+//	void pre_ln ( /*input->*/ Tensor<2,2> &F_2D
+//				  /*output->*/ );
 
 	void post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent
 				   /*output->second_piola_stress_S, C*/ );
+
+	// TESTING:
+	double eps_p_22 = 0.;
 
   private:
   	 Vector<double> eigenvalues;
@@ -72,8 +77,8 @@ fa(3)
  */
 
 // 3D
-template<>
-void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, eigenvalues, eigenvector, eigenbasis, ea, da, fa*/ )
+template<int dim>
+void ln_space<dim>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, eigenvalues, eigenvector, eigenbasis, ea, da, fa*/ )
 {
 	// Following
 	// "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors"
@@ -93,6 +98,24 @@ void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, e
 			eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
 			eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
 		}
+
+		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
+		// shall belong to lambda_3, hence we search for the EW that equals C33
+		// and move this to the end of the list of eigenvalues and eigenvectors
+		 // ToDo-optimize: if we find the EW at i=2, we can leave it there, hence the loop could be limited to (i<2)
+		 // ToDo-optimize: Besides the following loop everything else is the same as for 3D maybe merge this
+		if ( dim==2 )
+			for (unsigned int i = 0; i < 3; ++i)
+				 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2]) < comp_tolerance )
+				 {
+					 double tmp_EW = eigenvalues[2];
+					 eigenvalues[2] = eigenvalues[i]; // truely lambda_3
+					 eigenvalues[i] = tmp_EW;
+
+					 Tensor<1,3> tmp_EV = eigenvector[2];
+					 eigenvector[2] = eigenvector[i];
+					 eigenvector[i] = tmp_EV;
+				 }
 
 		// Check if the found eigenvectors are perpendicular to each other
 //		if ((std::fabs(eigenvalues(0) - 1) > 1e-10)
@@ -132,7 +155,7 @@ void ln_space<3>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, e
 	 for (unsigned int a = 0; a < 3; ++a)
 		hencky_strain_3D += ea(a) * eigenbasis[a];
 
-	 hencky_strain = hencky_strain_3D;
+	 hencky_strain = extract_dim<dim> (hencky_strain_3D);
 
 	// Output-> SymmetricTensor<2, dim> hencky_strain, Vector<double> ea, da, fa,
 	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues,
@@ -350,99 +373,104 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 }
 
 
-// 2D
-template<>
-void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
-			  	  	  	   /*output->*/ )
-{
-	// Following "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors" by Miehe&Lambrecht \n
-	// Table I. Algorithm A
-	/*
-	 * 1. Eigenvalues, eigenvalue bases and diagonal functions:
-	 */
-
-	// Expand the 2D DefoGradient to pseudo 3D
-	 Tensor<2,3> F;
-	 for ( unsigned int i=0; i<2; ++i )
-	  for ( unsigned int j=0; j<2; ++j )
-		  F[i][j] = F_2D[i][j];
-
-	 // ToDo-assure: @q: We set the third component to 1, because the gradient of u_3/x_3
-	 // shall be zero when there is no deformation in the out-of plane direction (plane strain state)
-	  F[2][2] = 1.;
-
-	// Get the symmetric right cauchy green tensor and expand it to pseudo 3D
-	 SymmetricTensor<2,3> right_cauchy_green_sym = symmetrize( contract<1,0>(transpose(F),F) );
-
-	// Compute Eigenvalues, Eigenvectors and Eigenbasis
-	 {
-		// Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
-		 for (unsigned int i = 0; i < 3; ++i) {
-			eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
-			eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
-		 }
-
-		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
-		// shall belong to lambda_3, hence we search for the EW that equals C33
-		// and move this to the end of the list of eigenvalues and eigenvectors
-		 // ToDo-optimize: if we find the EW at i=2, we can leave it there, hence the loop could be limited to (i<2)
-		 // ToDo-optimize: Besides the following loop everything else is the same as for 3D maybe merge this
-		 for (unsigned int i = 0; i < 3; ++i)
-			 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2]) < comp_tolerance )
-			 {
-				 double tmp_EW = eigenvalues[2];
-				 eigenvalues[2] = eigenvalues[i]; // truely lambda_3
-				 eigenvalues[i] = tmp_EW;
-
-				 Tensor<1,3> tmp_EV = eigenvector[2];
-				 eigenvector[2] = eigenvector[i];
-				 eigenvector[i] = tmp_EV;
-			 }
-
-		// Check if the found eigenvectors are perpendicular to each other
-//		 if ((std::fabs(eigenvalues(0) - 1) > 1e-10)
-//			&& (std::fabs(eigenvalues(1) - 1) > 1e-10)
-//			&& (std::fabs(eigenvalues(2) - 1) > 1e-10)) {
-//			for (unsigned int i = 0; i < 3; ++i) {
-//				for (unsigned int j = i + 1; j < 3; ++j) {
-//					AssertThrow( (std::fabs(eigenvector[i] * eigenvector[j]) < 1e-12),
-//								 ExcMessage("ln-space<< Eigenvectors are not perpendicular to each other.") );
-//				}
-//			}
+//// 2D
+//template<>
+//void ln_space<2>::pre_ln ( /*input->*/ Tensor<2,2> &F_2D
+//			  	  	  	   /*output->*/ )
+//{
+//	// Following "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors" by Miehe&Lambrecht \n
+//	// Table I. Algorithm A
+//	/*
+//	 * 1. Eigenvalues, eigenvalue bases and diagonal functions:
+//	 */
+//
+//	// Expand the 2D DefoGradient to pseudo 3D
+//	 Tensor<2,3> F;
+//	 for ( unsigned int i=0; i<2; ++i )
+//	  for ( unsigned int j=0; j<2; ++j )
+//		  F[i][j] = F_2D[i][j];
+//
+//	 // ToDo-assure: @q: We set the third component to 1, because the gradient of u_3/x_3
+//	 // shall be zero when there is no deformation in the out-of plane direction (plane strain state)
+//	  F[2][2] = 1.;
+//
+//	  if ( true /*axisymmetric*/){
+//			F[2][2]/*theta*/ += eps_p_22; // abusing the zz-component of eps_p_n for u/r
+//			eps_p_22 = 0.;
+//	  }
+//
+//	// Get the symmetric right cauchy green tensor and expand it to pseudo 3D
+//	 SymmetricTensor<2,3> right_cauchy_green_sym = symmetrize( contract<1,0>(transpose(F),F) );
+//
+//	// Compute Eigenvalues, Eigenvectors and Eigenbasis
+//	 {
+//		// Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
+//		 for (unsigned int i = 0; i < 3; ++i) {
+//			eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
+//			eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
 //		 }
-
-		// Compute eigenbasis Ma: eigenbasis = eigenvector \otimes eigenvector
-		 for (unsigned int i = 0; i < 3; ++i)
-		 {
-			eigenbasis[i] = outer_product_sym(eigenvector[i]);
-			Assert( eigenvalues(i) >= 0.0,
-						 ExcMessage("ln-space<< Eigenvalue is negativ. Check update_qph.") );
-		 }
-	 }
-
-	// Compute diagonal function \a ea and its first and second derivate \a da and \a fa
-	 for (unsigned int i = 0; i < 3; ++i)
-	 {
-		ea(i) = 0.5 * std::log( std::abs(eigenvalues(i)) );	// diagonal function
-		da(i) = std::pow(eigenvalues(i), -1.0);				// first derivative of diagonal function ea
-		fa(i) = -2.0 * std::pow(eigenvalues(i), -2.0);			// second derivative of diagonal function ea
-		Assert( ea(i) == ea(i),
-					 ExcMessage( "ln-space<< Ea is nan due to logarithm of negativ eigenvalue. Check update_qph.") );
-		Assert( da(i) > 0.0,
-					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 ."
-							 	 "Check update_qph.") );
-	 }
-
-	// Compute the Hencky strain
-	 for (unsigned int a = 0; a < 3; ++a)
-		 hencky_strain_3D += ea(a) * eigenbasis[a];
-
-	 hencky_strain = extract_dim<2> (hencky_strain_3D);
-
-	// Output-> SymmetricTensor<2, dim> hencky_strain, Vector<double> ea, da, fa,
-	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues,
-	//			std::vector< SymmetricTensor<2, dim> > eigenbasis
-}
+//
+//		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
+//		// shall belong to lambda_3, hence we search for the EW that equals C33
+//		// and move this to the end of the list of eigenvalues and eigenvectors
+//		 // ToDo-optimize: if we find the EW at i=2, we can leave it there, hence the loop could be limited to (i<2)
+//		 // ToDo-optimize: Besides the following loop everything else is the same as for 3D maybe merge this
+//		 for (unsigned int i = 0; i < 3; ++i)
+//			 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2]) < comp_tolerance )
+//			 {
+//				 double tmp_EW = eigenvalues[2];
+//				 eigenvalues[2] = eigenvalues[i]; // truely lambda_3
+//				 eigenvalues[i] = tmp_EW;
+//
+//				 Tensor<1,3> tmp_EV = eigenvector[2];
+//				 eigenvector[2] = eigenvector[i];
+//				 eigenvector[i] = tmp_EV;
+//			 }
+//
+//		// Check if the found eigenvectors are perpendicular to each other
+////		 if ((std::fabs(eigenvalues(0) - 1) > 1e-10)
+////			&& (std::fabs(eigenvalues(1) - 1) > 1e-10)
+////			&& (std::fabs(eigenvalues(2) - 1) > 1e-10)) {
+////			for (unsigned int i = 0; i < 3; ++i) {
+////				for (unsigned int j = i + 1; j < 3; ++j) {
+////					AssertThrow( (std::fabs(eigenvector[i] * eigenvector[j]) < 1e-12),
+////								 ExcMessage("ln-space<< Eigenvectors are not perpendicular to each other.") );
+////				}
+////			}
+////		 }
+//
+//		// Compute eigenbasis Ma: eigenbasis = eigenvector \otimes eigenvector
+//		 for (unsigned int i = 0; i < 3; ++i)
+//		 {
+//			eigenbasis[i] = outer_product_sym(eigenvector[i]);
+//			Assert( eigenvalues(i) >= 0.0,
+//						 ExcMessage("ln-space<< Eigenvalue is negativ. Check update_qph.") );
+//		 }
+//	 }
+//
+//	// Compute diagonal function \a ea and its first and second derivate \a da and \a fa
+//	 for (unsigned int i = 0; i < 3; ++i)
+//	 {
+//		ea(i) = 0.5 * std::log( std::abs(eigenvalues(i)) );	// diagonal function
+//		da(i) = std::pow(eigenvalues(i), -1.0);				// first derivative of diagonal function ea
+//		fa(i) = -2.0 * std::pow(eigenvalues(i), -2.0);			// second derivative of diagonal function ea
+//		Assert( ea(i) == ea(i),
+//					 ExcMessage( "ln-space<< Ea is nan due to logarithm of negativ eigenvalue. Check update_qph.") );
+//		Assert( da(i) > 0.0,
+//					 ExcMessage( "ln-space<< First derivative da of diagonal function is "+std::to_string(da(i))+" < 0.0 ."
+//							 	 "Check update_qph.") );
+//	 }
+//
+//	// Compute the Hencky strain
+//	 for (unsigned int a = 0; a < 3; ++a)
+//		 hencky_strain_3D += ea(a) * eigenbasis[a];
+//
+//	 hencky_strain = extract_dim<2> (hencky_strain_3D);
+//
+//	// Output-> SymmetricTensor<2, dim> hencky_strain, Vector<double> ea, da, fa,
+//	//			std::vector<Tensor<1, dim>> eigenvector, Vector<double> eigenvalues,
+//	//			std::vector< SymmetricTensor<2, dim> > eigenbasis
+//}
 
 
 
@@ -559,8 +587,9 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 		 second_piola_stress_S = extract_dim<2> ( stress_S_3D );
 	 }
 	 {
-		 SymmetricTensor<4,3> C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
-									  + projection_tensor_T_doublecon_L_sym;
+		 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
+				+ projection_tensor_T_doublecon_L_sym;
+
 		 C = extract_dim<2> ( C_3D );
 	 }
 }
