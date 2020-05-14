@@ -40,8 +40,7 @@ class ln_space
 	void post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent
 				   /*output->second_piola_stress_S, C*/ );
 
-	// TESTING:
-	double eps_p_22 = 0.;
+	SymmetricTensor<2,3> post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
 
   private:
   	 Vector<double> eigenvalues;
@@ -50,6 +49,8 @@ class ln_space
   	 Vector<double> ea;
   	 Vector<double> da;
   	 Vector<double> fa;
+
+  	SymmetricTensor<4,3> projection_tensor_P_sym;
 
  	const double comp_tolerance = 1e-8;
 };
@@ -320,7 +321,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 	// Check whether the projecton tensor is symmetric and store it into a \a SymmetricTensor
 	 Assert( symmetry_check(projection_tensor_P), ExcMessage( "ln-space<< Projection tensor P is not symmetric") );
-	 SymmetricTensor<4,3> projection_tensor_P_sym = symmetrize(projection_tensor_P);
+	 projection_tensor_P_sym = symmetrize(projection_tensor_P);
 
 	// Compute the double contraction of T and L
 	 Tensor<4,3> projection_tensor_T_doublecon_L;
@@ -439,7 +440,7 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 		 projection_tensor_P += gamma[a] * (Tensor<4,3>) Ma_x_Ma[a];
 	 }
 
-	 SymmetricTensor<4,3> projection_tensor_P_sym = symmetrize(projection_tensor_P);
+	 projection_tensor_P_sym = symmetrize(projection_tensor_P);
 
 	// Compute the double contraction of T and L
 	 // ToDo-optimize: merge the for-loops
@@ -486,6 +487,13 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 
 		 C = extract_dim<2> ( C_3D );
 	 }
+}
+
+
+template<int dim>
+SymmetricTensor<2,3> ln_space<dim>::post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor)
+{
+	return ln_tensor * projection_tensor_P_sym;
 }
 
 
