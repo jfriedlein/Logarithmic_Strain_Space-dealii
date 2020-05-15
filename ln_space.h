@@ -365,6 +365,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 	 C = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
 							  + projection_tensor_T_doublecon_L_sym;
+	 C_3D = C;
 }
 
 
