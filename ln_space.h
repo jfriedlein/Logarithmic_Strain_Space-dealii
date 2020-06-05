@@ -101,6 +101,7 @@ void ln_space<dim>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain,
 		// shall belong to lambda_3, hence we search for the EW that equals C33
 		// and move this to the end of the list of eigenvalues and eigenvectors
 		 // ToDo-optimize: if we find the EW at i=2, we can leave it there, hence the loop could be limited to (i<2)
+		// @todo-optimize: Check the use of the std::swap function
 		if ( dim==2 )
 			for (unsigned int i = 0; i < 3; ++i)
 				 if ( std::abs(eigenvalues[i]-right_cauchy_green_sym[2][2]) < comp_tolerance )
