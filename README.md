@@ -21,6 +21,7 @@ The transformation consists of three steps. First, we transform the deformation 
     	SymmetricTensor<4,dim> C = ln_space.C;
 
 ## ToDo
+* ADD the special outer_product_sym functions !!!
 * avoid directly accessing the member variables, use access functions instead, e.g. with const return values
 * merge the for-loops in the 2D pre_ln
 * check which header files are needed

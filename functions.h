@@ -111,18 +111,6 @@ bool symmetry_check ( Tensor<2,dim> &tensor )
 
 	return true;
 }
-//template<int dim>
-//bool symmetry_check ( Tensor<4,dim> &tensor )
-//{
-//	for ( unsigned int i=0; i<dim; i++ )
-//		for ( unsigned int j=0; j<dim; j++ )
-//			for ( unsigned int k=0; k<dim; k++ )
-//				for ( unsigned int l=0; l<dim; l++ )
-//					if ( ( std::abs(tensor[i][j][k][l] - tensor[i][j][l][k])>1e-12 ) || ( std::abs(tensor[i][j][k][l] - tensor[j][i][k][l])>1e-12 ) )
-//						return false;
-//
-//	return true;
-//}
 template<int dim>
 bool symmetry_check(const Tensor<4,dim> &temp){
     for(unsigned int i=0; i<dim; ++i){
@@ -158,19 +146,6 @@ bool symmetry_check(const Tensor<4,dim> &temp){
     return true;
 }
 
-//template<int dim>
-//SymmetricTensor<4,dim> symmetrize( Tensor<4,dim> &tensor )
-//{
-//	SymmetricTensor<4,dim> sym_tensor;
-//	for ( unsigned int i=0; i<dim; i++ )
-//		for ( unsigned int j=0; j<dim; j++ )
-//			for ( unsigned int k=0; k<dim; k++ )
-//				for ( unsigned int l=0; l<dim; l++ )
-//					sym_tensor[i][j][k][l] = tensor[i][j][k][l]; // here we assume that both tensors are symmetric
-//  // or under the same assumption
-//	SymmetricTensor<4,dim> sym_tensor (tensor);
-//	return sym_tensor;
-//}
 
 template<int dim>
 SymmetricTensor<4,dim> symmetrize(const Tensor<4,dim> &tensor){
