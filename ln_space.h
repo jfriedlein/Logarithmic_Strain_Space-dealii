@@ -1,6 +1,13 @@
 #ifndef ln_space_H
 #define ln_space_H
 
+/*
+ *
+ * Authors: Christian Burkhardt and Johannes Friedlein,
+ * 	    FAU Erlangen-Nuremberg, 2019/2020
+ *
+ */
+
 // @section includes Include Files
 // The data type SymmetricTensor and some related operations, such as trace, symmetrize, deviator, ... for tensor calculus
 #include <deal.II/base/symmetric_tensor.h>

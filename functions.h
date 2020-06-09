@@ -3,11 +3,10 @@
 
 
 /*
- * 
- * Created on: July 10, 2019
- * 			iwtm96
- * 			 
- * 
+ *
+ * Authors: Christian Burkhardt and Johannes Friedlein,
+ * 	    FAU Erlangen-Nuremberg, 2019/2020
+ *
  */
 
 
