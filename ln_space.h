@@ -49,6 +49,8 @@ class ln_space
 
 	SymmetricTensor<2,3> post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
 
+	SymmetricTensor<2,3> plastic_right_cauchy_green_AS (SymmetricTensor<2,dim> plastic_hencky_strain);
+
   private:
   	 Vector<double> eigenvalues;
   	 std::vector< Tensor<1,3> > eigenvector;
@@ -498,11 +500,60 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	 }
 }
 
-
+/*
+ * Transform the given second order tensor from the ln-space into the real world
+ * works for e.g. @todo fin
+ */
 template<int dim>
 SymmetricTensor<2,3> ln_space<dim>::post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor)
 {
 	return ln_tensor * projection_tensor_P_sym;
+}
+
+
+template<int dim>
+SymmetricTensor<2,3> ln_space<dim>::plastic_right_cauchy_green_AS (SymmetricTensor<2,dim> plastic_hencky_strain)
+{
+	AssertThrow( false, ExcMessage("plastic_right_cauchy_green_AS<< Sorry. Even though the algorithm "
+								   "to compute the plastic RCG tensor was tested, the implementation into this "
+								   "ln-space class has not been tested at all. So either you have enough faith to "
+								   "simply remove this AssertThrow in the code or you do some testing to validate the function yourself."));
+
+	// Compute the eigenvalues and eigenvectors of the plastic hencky strain
+	 Vector<double> eigenvalues_pl(3);
+	 std::vector< Tensor<1,3> > eigenvector_pl(3);
+	 for (unsigned int i = 0; i < 3; ++i)
+	 {
+		eigenvalues_pl[i] = eigenvectors(plastic_hencky_strain)[i].first;
+		eigenvector_pl[i] = eigenvectors(plastic_hencky_strain)[i].second;
+	 }
+
+	// Check if the found eigenvectors are perpendicular to each other
+	if ( false /*no debugging*/)
+		if ((fabs(eigenvalues_pl(0) - 1) > 1e-10)
+				&& (fabs(eigenvalues_pl(1) - 1) > 1e-10)
+				&& (fabs(eigenvalues_pl(2) - 1) > 1e-10))
+			for (unsigned int i = 0; i < 3; ++i)
+				for (unsigned int j = i + 1; j < 3; ++j)
+					Assert( (fabs(eigenvector[i] * eigenvector[j]) < 1e-12),
+							ExcMessage("Eigenvectors are not perpendicular to each other") );
+
+	// Compute eigenbasis
+	 std::vector< SymmetricTensor<2,3> > eigenbasis_pl(3);
+	 for (unsigned int i = 0; i < 3; ++i)
+		eigenbasis_pl[i] = outer_product_sym( eigenvector_pl[i] );
+
+	// Compute the values of \a ea
+	 Vector<double> ea(3);
+	 for (unsigned int i = 0; i < 3; ++i)
+		ea(i) = exp(2.0* eigenvalues_pl(i));			// diagonal
+
+	// Finally compute the plastic right Cauchy-Green tensor
+	 SymmetricTensor<2,3> plastic_right_cauchy_green;
+	 for (unsigned int a = 0; a < 3; ++a)
+		plastic_right_cauchy_green += ea(a) * eigenbasis_pl[a];
+
+	return plastic_right_cauchy_green;
 }
 
 
