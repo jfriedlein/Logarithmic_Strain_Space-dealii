@@ -100,6 +100,64 @@ Tensor<4,dim> get_tensor_operator_F_left(const SymmetricTensor<2,dim> &Ma,
 
 
 
+// ############################################################################################################
+// Optimised function to compute outer products of symmetric tensors
+// ############################################################################################################
+#ifndef outer_product_sym_H
+#define outer_product_sym_H
+
+template<int dim>
+SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A, const SymmetricTensor<2,dim> &B )
+{
+	SymmetricTensor<4,dim> D;
+	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
+	// ToDo: still not optimal element 1112 and 1211 are both accessed
+	for ( unsigned int i=0; i<dim; ++i )
+		for ( unsigned int j=i; j<dim; ++j )
+			for ( unsigned int k=i; k<dim; ++k )
+				for ( unsigned int l=k; l<dim; ++l )
+				{
+					double tmp = A[i][j] * B[k][l] + B[i][j] * A[k][l];
+					D[i][j][k][l] = tmp;
+					D[k][l][i][j] = tmp;
+				}
+	return D;
+}
+template<int dim>
+SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A )
+{
+	SymmetricTensor<4,dim> D;
+	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
+	// ToDo: still not optimal element 1112 and 1211 are both accessed
+	for ( unsigned int i=0; i<dim; ++i )
+    	for ( unsigned int j=i; j<dim; ++j )
+        	for ( unsigned int k=i; k<dim; ++k )
+            	for ( unsigned int l=k; l<dim; ++l )
+            	{
+            		double tmp = A[i][j] * A[k][l];
+            		D[i][j][k][l] = tmp;
+            		D[k][l][i][j] = tmp;
+            	}
+	return D;
+}
+template<int dim>
+SymmetricTensor<2,dim> outer_product_sym( const Tensor<1,dim> &A )
+{
+	SymmetricTensor<2,dim> D;
+	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
+	// ToDo: still not optimal element 1112 and 1211 are both accessed
+	for ( unsigned int i=0; i<dim; ++i )
+    	for ( unsigned int j=i; j<dim; ++j )
+    		D[i][j] = A[i] * A[j];
+
+	return D;
+}
+
+#endif //outer_product_sym_H
+// ############################################################################################################
+// ############################################################################################################
+
+
 // temp symmetry check [JF]
 template<int dim>
 bool symmetry_check ( Tensor<2,dim> &tensor )
