@@ -529,7 +529,9 @@ SymmetricTensor<2,3> ln_space<dim>::plastic_right_cauchy_green_AS (SymmetricTens
 	 }
 
 	// Check if the found eigenvectors are perpendicular to each other
-	if ( false /*no debugging*/)
+	// @todo Change the \a false to a criterion detecting whether the code is run in debug or release mode
+	 if ( false /*no debugging*/)
+	 {
 		if ((fabs(eigenvalues_pl(0) - 1) > 1e-10)
 				&& (fabs(eigenvalues_pl(1) - 1) > 1e-10)
 				&& (fabs(eigenvalues_pl(2) - 1) > 1e-10))
@@ -537,6 +539,7 @@ SymmetricTensor<2,3> ln_space<dim>::plastic_right_cauchy_green_AS (SymmetricTens
 				for (unsigned int j = i + 1; j < 3; ++j)
 					Assert( (fabs(eigenvector[i] * eigenvector[j]) < 1e-12),
 							ExcMessage("Eigenvectors are not perpendicular to each other") );
+	 }
 
 	// Compute eigenbasis
 	 std::vector< SymmetricTensor<2,3> > eigenbasis_pl(3);
