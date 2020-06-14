@@ -47,6 +47,11 @@ The transformation consists of three steps. First, we transform the deformation 
     	SymmetricTensor<4,dim> L = ln_space.C;
 ```
 
+## The code/ A look under the hood
+The documentation for the ln-space code can be found here https://jfriedlein.github.io/Logarithmic_Strain_Space-dealii/html/namespaceln__space.html.
+
+@todo Create a proper mainpage instead of this namespace-thing
+
 ## References and Literature
 * papers on the algorithms:
     * Miehe, C. and Lambrecht, M. (2001), Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill's family of generalized strain tensors. Commun. Numer. Meth. Engng., 17: 337-353. doi:10.1002/cnm.404
