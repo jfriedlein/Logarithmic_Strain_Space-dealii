@@ -2,17 +2,28 @@
 C++ code using the deal.ii library for the transformation into the logarithmic strain space
 
 ## References and Literature
-* Miehe papers
-* ...
+* papers on the algorithms:
+    * Miehe, C. and Lambrecht, M. (2001), Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill's family of generalized strain tensors. Commun. Numer. Meth. Engng., 17: 337-353. doi:10.1002/cnm.404
+    * Miehe, C. & Apel, N. & Lambrecht, M.. (2002). Anisotropic additive plasticity in the logarithmic strain space: Modular kinematic formulation and implementation based on incremental minimization principles for standard materials. Computer Methods in Applied Mechanics and Engineering - COMPUT METHOD APPL MECH ENG. 191. 5383-5425. 10.1016/S0045-7825(02)00438-3. 
+* papers on the application:
+    * ...
 
-## The goal
-@todo formulate
-expand small strain  material models to finite strain
-easy to use pre- and post-processing
-const. time for pre- and postprocessing, more efficient especially for complicated material models
+## The goal/When to use this code
+The logarithmic strain space (herein often abbreviated as ln-space) is a very simple (in terms of the application) way to apply small strain material models to finite strains. So, in case you have a small strain model that you would like to apply to applications exposed to large deformations/finite strains, the ln-space it probably the easiest way to achieve this.
+
+All you need are three steps:
+1. Pre-processing from the world of finite strains into the logarithmic strain space
+2. Calling your small strain model with the Hencky strain computed in the pre-processing
+3. Post-processing the computed stress and tangent(s) by transforming them from the ln-space back into the real world.
+And the best is, steps 1 and 3 are always the same (copy-paste) and the second step is the same as done for the small strain implementation.
+
+Drawbacks?
+
+Especially step 3, the post-processing is expensive independent of your material model. So, as far as efficiency is concerned, a simple material model utilising the ln-space is most certainly slower, than its derived finite strain equivalent (a model that was developed for finite strains). However, for complicated material models it can be faster to use the small strain model in the ln-space, instead of a finite strain equivalent (and it requires no further derivations/development to get from small to finite strains). Another disadvantage, is the limitation to small elastic strains. The latter is usually satisfied for metal forming and similar applications, where elastic strain are small and large plastic strain occur.
 
 ## Background
 @todo add some equations
+
 The transformation consists of three steps. First, we transform the deformation gradient `F` into the logarithmic strain space (ln-space) and obtain the Hencky strain (preprocessing). Secondly, the standard small strain material model is called using the Hencky strain and the usual history. The outcome is the stress measure `T` and the fourth order tangent `C`. Finally, we transform the stress and tangent modulus back from the logarithmic strain space to obtain e.g. the Second Piola-Kirchhoff stress tensor `S`and the Lagrangian tangent modulus `L` (postprocessing).
 
 ## How to/Interface
