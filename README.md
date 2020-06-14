@@ -4,11 +4,13 @@ C++ code using the deal.ii library for the transformation into the logarithmic s
 ## The goal/When to use this code
 The logarithmic strain space (herein often abbreviated as ln-space) is a very simple (in terms of the application) way to apply small strain material models to finite strains. So, in case you have a small strain model that you would like to apply to applications exposed to large deformations/finite strains, the ln-space it probably the easiest way to achieve this.
 
-All you need are three steps:
+All you need are three steps as schematically (simplified) shown in the figure:
 1. Pre-processing from the world of finite strains into the logarithmic strain space
 2. Calling your small strain model with the Hencky strain computed in the pre-processing
 3. Post-processing the computed stress and tangent(s) by transforming them from the ln-space back into the real world.
 And the best is, steps 1 and 3 are always the same (copy-paste) and the second step is the same as done for the small strain implementation.
+
+<img src="https://github.com/jfriedlein/Logarithmic_Strain_Space-dealii/blob/master/images/ln-space%20-%20overview.png" width="700">
 
 Drawbacks?
 
