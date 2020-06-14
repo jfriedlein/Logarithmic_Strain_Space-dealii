@@ -6,22 +6,20 @@
 {\ttfamily \#include $<$fstream$>$}\\*
 {\ttfamily \#include $<$cmath$>$}\\*
 {\ttfamily \#include \char`\"{}functions.\+h\char`\"{}}\\*
-Include dependency graph for ln\+\_\+space.\+h\+:\nopagebreak
+{\ttfamily \#include \char`\"{}../\+M\+A-\/\+Code/auxiliary\+\_\+functions/\+Standard\+Tensors.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../\+M\+A-\/\+Code/auxiliary\+\_\+functions/tensor\+\_\+operators.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../\+M\+A-\/\+Code/auxiliary\+\_\+functions/auxiliary\+\_\+functions.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../2\+D\+\_\+axial-\/symmetry\+\_\+plane-\/strain\+\_\+dealii/handling\+\_\+2\+D.\+h\char`\"{}}\\*
+Include dependency graph for ln\+\_\+space.\+h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{ln__space_8h__incl}
 \end{center}
 \end{figure}
-\subsection*{Namespaces}
+\subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
- \hyperlink{namespaceln__space}{ln\+\_\+space}
-\end{DoxyCompactItemize}
-\subsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-{\footnotesize template$<$int dim$>$ }\\void \hyperlink{namespaceln__space_a85e361462746b126386ad7e1d608e7d8}{ln\+\_\+space\+::pre\+\_\+ln} (Tensor$<$ 2, dim $>$ \&F, Symmetric\+Tensor$<$ 2, dim $>$ \&hencky\+\_\+strain, Vector$<$ double $>$ \&ea, Vector$<$ double $>$ \&da, Vector$<$ double $>$ \&fa, std\+::vector$<$ Tensor$<$ 1, dim $>$ $>$ \&eigenvector, Vector$<$ double $>$ \&eigenvalues, std\+::vector$<$ Symmetric\+Tensor$<$ 2, dim $>$ $>$ \&eigenbasis)
-\item 
-{\footnotesize template$<$int dim$>$ }\\void \hyperlink{namespaceln__space_a0f5e3bde0b1ee47f3dbc5977b4653342}{ln\+\_\+space\+::post\+\_\+ln} (Vector$<$ double $>$ \&ea, Vector$<$ double $>$ \&da, Vector$<$ double $>$ \&fa, Vector$<$ double $>$ \&eigenvalues, std\+::vector$<$ Symmetric\+Tensor$<$ 2, dim $>$ $>$ \&eigenbasis, Symmetric\+Tensor$<$ 2, dim $>$ \&second\+\_\+piola\+\_\+stress\+\_\+S, Symmetric\+Tensor$<$ 4, dim $>$ \&elasto\+\_\+plastic\+\_\+tangent)
+class \hyperlink{classln__space}{ln\+\_\+space$<$ dim $>$}
 \end{DoxyCompactItemize}

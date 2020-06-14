@@ -11,20 +11,27 @@
 {\ttfamily \#include $<$string$>$}\\*
 {\ttfamily \#include $<$utility$>$}\\*
 {\ttfamily \#include $<$vector$>$}\\*
-Include dependency graph for functions.\+h\+:\nopagebreak
+Include dependency graph for functions.\+h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{functions_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=290pt]{functions_8h__dep__incl}
+\includegraphics[width=145pt]{functions_8h__dep__incl}
 \end{center}
 \end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{functions_8h_a06d41b26246b319ff9d9b28be162b089}{outer\+\_\+product\+\_\+sym\+\_\+H}
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -34,12 +41,24 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 {\footnotesize template$<$int dim$>$ }\\Tensor$<$ 4, dim $>$ \hyperlink{functions_8h_a6f9435c7728281851248d3537c100e7d}{get\+\_\+tensor\+\_\+operator\+\_\+\+F\+\_\+left} (const Symmetric\+Tensor$<$ 2, dim $>$ \&Ma, const Symmetric\+Tensor$<$ 2, dim $>$ \&Mb, const Symmetric\+Tensor$<$ 2, dim $>$ \&Mc, const Symmetric\+Tensor$<$ 2, dim $>$ \&T)
 \item 
+{\footnotesize template$<$int dim$>$ }\\Symmetric\+Tensor$<$ 4, dim $>$ \hyperlink{functions_8h_aa5f33021df9244e49e86b17b15286fa1}{outer\+\_\+product\+\_\+sym} (const Symmetric\+Tensor$<$ 2, dim $>$ \&A, const Symmetric\+Tensor$<$ 2, dim $>$ \&B)
+\item 
+{\footnotesize template$<$int dim$>$ }\\Symmetric\+Tensor$<$ 4, dim $>$ \hyperlink{functions_8h_a47630aad94c5f95af31f98cec5c0ec9a}{outer\+\_\+product\+\_\+sym} (const Symmetric\+Tensor$<$ 2, dim $>$ \&A)
+\item 
+{\footnotesize template$<$int dim$>$ }\\Symmetric\+Tensor$<$ 2, dim $>$ \hyperlink{functions_8h_a0ec7a717b44c3db05eb93bc370cca48c}{outer\+\_\+product\+\_\+sym} (const Tensor$<$ 1, dim $>$ \&A)
+\item 
 {\footnotesize template$<$int dim$>$ }\\bool \hyperlink{functions_8h_aa37f13547b984cb066e2fcb530b36425}{symmetry\+\_\+check} (Tensor$<$ 2, dim $>$ \&tensor)
 \item 
 {\footnotesize template$<$int dim$>$ }\\bool \hyperlink{functions_8h_adaf42311602a831f5c8c0fffdbb8aa63}{symmetry\+\_\+check} (const Tensor$<$ 4, dim $>$ \&temp)
 \item 
 {\footnotesize template$<$int dim$>$ }\\Symmetric\+Tensor$<$ 4, dim $>$ \hyperlink{functions_8h_afe83e9509497294b7f662b800b6b91ff}{symmetrize} (const Tensor$<$ 4, dim $>$ \&tensor)
 \end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{functions.\+h@{functions.\+h}!outer\+\_\+product\+\_\+sym\+\_\+H@{outer\+\_\+product\+\_\+sym\+\_\+H}}
+\index{outer\+\_\+product\+\_\+sym\+\_\+H@{outer\+\_\+product\+\_\+sym\+\_\+H}!functions.\+h@{functions.\+h}}
+\subsubsection[{\texorpdfstring{outer\+\_\+product\+\_\+sym\+\_\+H}{outer_product_sym_H}}]{\setlength{\rightskip}{0pt plus 5cm}\#define outer\+\_\+product\+\_\+sym\+\_\+H}\hypertarget{functions_8h_a06d41b26246b319ff9d9b28be162b089}{}\label{functions_8h_a06d41b26246b319ff9d9b28be162b089}
 
 
 \subsection{Function Documentation}
@@ -55,27 +74,28 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 )}\hypertarget{functions_8h_a6f9435c7728281851248d3537c100e7d}{}\label{functions_8h_a6f9435c7728281851248d3537c100e7d}
 
 
-Referenced by ln\+\_\+space\+::post\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\+Thermo\+\_\+\+Elasto\+\_\+\+Plastic$<$ dim $>$\+::return\+\_\+stress\+\_\+tangent\+\_\+int\+\_\+variables\+\_\+for\+\_\+large\+\_\+strain().
+Referenced by ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln().
 
 
 \begin{DoxyCode}
-79                                                                          \{
-80     Tensor<4,dim> tmp;
-81 
-82     Tensor<2,dim> temp\_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mb);
-83     Tensor<2,dim> MaTMb = contract<1,0>((Tensor<2,dim>)Ma,temp\_tensor);
+82                                                                          \{
+83     Tensor<4,dim> tmp;
 84 
-85     for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)\{
-86         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)\{
-87             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)\{
-88                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)\{
-89                     tmp[i][j][k][l] = MaTMb[i][k] * Mc[j][l] + MaTMb[i][l] * Mc[j][k];
-90                 \}
-91             \}
-92         \}
-93     \}
-94     \textcolor{keywordflow}{return} tmp;
-95 \}
+85     Tensor<2,dim> temp\_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mb);
+86     Tensor<2,dim> MaTMb = contract<1,0>((Tensor<2,dim>)Ma,temp\_tensor);
+87 
+88     for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
+89         for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)
+90             for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
+91                 for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l)
+92                 \{
+93                     \textcolor{keywordtype}{double} tmp\_scalar = MaTMb[i][k] * Mc[j][l] + MaTMb[i][l] * Mc[j][k];
+94                     tmp[i][j][k][l] = tmp\_scalar;
+95                     tmp[i][j][l][k] = tmp\_scalar;
+96                 \}
+97 
+98     \textcolor{keywordflow}{return} tmp;
+99 \}
 \end{DoxyCode}
 \index{functions.\+h@{functions.\+h}!get\+\_\+tensor\+\_\+operator\+\_\+\+F\+\_\+right@{get\+\_\+tensor\+\_\+operator\+\_\+\+F\+\_\+right}}
 \index{get\+\_\+tensor\+\_\+operator\+\_\+\+F\+\_\+right@{get\+\_\+tensor\+\_\+operator\+\_\+\+F\+\_\+right}!functions.\+h@{functions.\+h}}
@@ -89,28 +109,28 @@ Referenced by ln\+\_\+space\+::post\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\
 )}\hypertarget{functions_8h_acfd8da38df3766246f7bcf0e736ad9f4}{}\label{functions_8h_acfd8da38df3766246f7bcf0e736ad9f4}
 
 
-Referenced by ln\+\_\+space\+::post\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\+Thermo\+\_\+\+Elasto\+\_\+\+Plastic$<$ dim $>$\+::return\+\_\+stress\+\_\+tangent\+\_\+int\+\_\+variables\+\_\+for\+\_\+large\+\_\+strain().
+Referenced by ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln().
 
 
 \begin{DoxyCode}
-55                                                                           \{
-56     Tensor<4,dim> tmp;
-57 
-58     Tensor<2,dim> temp\_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mc);
-59     Tensor<2,dim> MbTMc = contract<1,0>((Tensor<2,dim>)Mb,temp\_tensor);
-60 
-61     for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)\{
-62         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)\{
-63             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)\{
-64                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)\{
-65                     tmp[i][j][k][l] = Ma[i][k] * MbTMc[j][l] + Ma[i][l] * MbTMc[j][k];
-66                 \}
-67             \}
-68         \}
-69     \}
-70 
-71     \textcolor{keywordflow}{return} tmp;
-72 \}
+57 \{
+58     Tensor<4,dim> tmp; \textcolor{comment}{// has minor symmetry of indices k,l}
+59 
+60     Tensor<2,dim> temp\_tensor = contract<1,0>((Tensor<2,dim>)T, (Tensor<2,dim>)Mc);
+61     Tensor<2,dim> MbTMc = contract<1,0>((Tensor<2,dim>)Mb,temp\_tensor);
+62 
+63     for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
+64         for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)
+65             for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
+66                 for(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l)
+67                 \{
+68                     \textcolor{keywordtype}{double} tmp\_scalar = Ma[i][k] * MbTMc[j][l] + Ma[i][l] * MbTMc[j][k];
+69                     tmp[i][j][k][l] = tmp\_scalar;
+70                     tmp[i][j][l][k] = tmp\_scalar;
+71                 \}
+72 
+73     \textcolor{keywordflow}{return} tmp;
+74 \}
 \end{DoxyCode}
 \index{functions.\+h@{functions.\+h}!get\+\_\+tensor\+\_\+operator\+\_\+G@{get\+\_\+tensor\+\_\+operator\+\_\+G}}
 \index{get\+\_\+tensor\+\_\+operator\+\_\+G@{get\+\_\+tensor\+\_\+operator\+\_\+G}!functions.\+h@{functions.\+h}}
@@ -122,25 +142,100 @@ Referenced by ln\+\_\+space\+::post\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\
 )}\hypertarget{functions_8h_a6e649771188b6d625bea6309e77fbd16}{}\label{functions_8h_a6e649771188b6d625bea6309e77fbd16}
 
 
-Referenced by ln\+\_\+space\+::post\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\+Thermo\+\_\+\+Elasto\+\_\+\+Plastic$<$ dim $>$\+::return\+\_\+stress\+\_\+tangent\+\_\+int\+\_\+variables\+\_\+for\+\_\+large\+\_\+strain().
+Referenced by ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln().
 
 
 \begin{DoxyCode}
-34                                                                                                        \{
-35 
-36     Tensor<4,dim> tmp;
-37 
-38     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)\{
-39         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)\{
-40             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)\{
-41                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)\{
-42                     tmp[i][j][k][l] = Ma[i][k] * Mb[j][l] + Ma[i][l] * Mb[j][k];
-43                 \}
-44             \}
-45         \}
-46     \}
+34 \{
+35     Tensor<4,dim> tmp; \textcolor{comment}{// has minor symmetry of indices k,l}
+36 
+37     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
+38         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)
+39             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
+40                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l)
+41                 \{
+42                     \textcolor{keywordtype}{double} tmp\_scalar = Ma[i][k] * Mb[j][l] + Ma[i][l] * Mb[j][k];
+43                     tmp[i][j][k][l] = tmp\_scalar;
+44                     tmp[i][j][l][k] = tmp\_scalar;
+45                 \}
+46 
 47     \textcolor{keywordflow}{return} tmp;
 48 \}
+\end{DoxyCode}
+\index{functions.\+h@{functions.\+h}!outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}}
+\index{outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}!functions.\+h@{functions.\+h}}
+\subsubsection[{\texorpdfstring{outer\+\_\+product\+\_\+sym(const Symmetric\+Tensor$<$ 2, dim $>$ \&\+A, const Symmetric\+Tensor$<$ 2, dim $>$ \&\+B)}{outer_product_sym(const SymmetricTensor< 2, dim > &A, const SymmetricTensor< 2, dim > &B)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim$>$ Symmetric\+Tensor$<$4,dim$>$ outer\+\_\+product\+\_\+sym (
+\begin{DoxyParamCaption}
+\item[{const Symmetric\+Tensor$<$ 2, dim $>$ \&}]{A, }
+\item[{const Symmetric\+Tensor$<$ 2, dim $>$ \&}]{B}
+\end{DoxyParamCaption}
+)}\hypertarget{functions_8h_aa5f33021df9244e49e86b17b15286fa1}{}\label{functions_8h_aa5f33021df9244e49e86b17b15286fa1}
+
+
+Referenced by ln\+\_\+space$<$ dim $>$\+::plastic\+\_\+right\+\_\+cauchy\+\_\+green\+\_\+\+A\+S(), ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln(), and ln\+\_\+space$<$ dim $>$\+::pre\+\_\+ln().
+
+
+\begin{DoxyCode}
+111 \{
+112     SymmetricTensor<4,dim> D;
+113     \textcolor{comment}{// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor}
+114     \textcolor{comment}{// ToDo: still not optimal element 1112 and 1211 are both accessed}
+115     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i )
+116         \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=i; j<dim; ++j )
+117             \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=i; k<dim; ++k )
+118                 \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l )
+119                 \{
+120                     \textcolor{keywordtype}{double} tmp = A[i][j] * B[k][l] + B[i][j] * A[k][l];
+121                     D[i][j][k][l] = tmp;
+122                     D[k][l][i][j] = tmp;
+123                 \}
+124     \textcolor{keywordflow}{return} D;
+125 \}
+\end{DoxyCode}
+\index{functions.\+h@{functions.\+h}!outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}}
+\index{outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}!functions.\+h@{functions.\+h}}
+\subsubsection[{\texorpdfstring{outer\+\_\+product\+\_\+sym(const Symmetric\+Tensor$<$ 2, dim $>$ \&\+A)}{outer_product_sym(const SymmetricTensor< 2, dim > &A)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim$>$ Symmetric\+Tensor$<$4,dim$>$ outer\+\_\+product\+\_\+sym (
+\begin{DoxyParamCaption}
+\item[{const Symmetric\+Tensor$<$ 2, dim $>$ \&}]{A}
+\end{DoxyParamCaption}
+)}\hypertarget{functions_8h_a47630aad94c5f95af31f98cec5c0ec9a}{}\label{functions_8h_a47630aad94c5f95af31f98cec5c0ec9a}
+
+\begin{DoxyCode}
+128 \{
+129     SymmetricTensor<4,dim> D;
+130     \textcolor{comment}{// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor}
+131     \textcolor{comment}{// ToDo: still not optimal element 1112 and 1211 are both accessed}
+132     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i )
+133         \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=i; j<dim; ++j )
+134             \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=i; k<dim; ++k )
+135                 \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l )
+136                 \{
+137                     \textcolor{keywordtype}{double} tmp = A[i][j] * A[k][l];
+138                     D[i][j][k][l] = tmp;
+139                     D[k][l][i][j] = tmp;
+140                 \}
+141     \textcolor{keywordflow}{return} D;
+142 \}
+\end{DoxyCode}
+\index{functions.\+h@{functions.\+h}!outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}}
+\index{outer\+\_\+product\+\_\+sym@{outer\+\_\+product\+\_\+sym}!functions.\+h@{functions.\+h}}
+\subsubsection[{\texorpdfstring{outer\+\_\+product\+\_\+sym(const Tensor$<$ 1, dim $>$ \&\+A)}{outer_product_sym(const Tensor< 1, dim > &A)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim$>$ Symmetric\+Tensor$<$2,dim$>$ outer\+\_\+product\+\_\+sym (
+\begin{DoxyParamCaption}
+\item[{const Tensor$<$ 1, dim $>$ \&}]{A}
+\end{DoxyParamCaption}
+)}\hypertarget{functions_8h_a0ec7a717b44c3db05eb93bc370cca48c}{}\label{functions_8h_a0ec7a717b44c3db05eb93bc370cca48c}
+
+\begin{DoxyCode}
+145 \{
+146     SymmetricTensor<2,dim> D;
+147     \textcolor{comment}{// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor}
+148     \textcolor{comment}{// ToDo: still not optimal element 1112 and 1211 are both accessed}
+149     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i )
+150         \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=i; j<dim; ++j )
+151             D[i][j] = A[i] * A[j];
+152 
+153     \textcolor{keywordflow}{return} D;
+154 \}
 \end{DoxyCode}
 \index{functions.\+h@{functions.\+h}!symmetrize@{symmetrize}}
 \index{symmetrize@{symmetrize}!functions.\+h@{functions.\+h}}
@@ -155,31 +250,31 @@ References symmetry\+\_\+check().
 
 
 
-Referenced by ln\+\_\+space\+::post\+\_\+ln(), ln\+\_\+space\+::pre\+\_\+ln(), and Constitutive\+\_\+\+Laws\+::\+Thermo\+\_\+\+Elasto\+\_\+\+Plastic$<$ dim $>$\+::return\+\_\+stress\+\_\+tangent\+\_\+int\+\_\+variables\+\_\+for\+\_\+large\+\_\+strain().
+Referenced by ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln(), and ln\+\_\+space$<$ dim $>$\+::pre\+\_\+ln().
 
 
 \begin{DoxyCode}
-172                                                               \{
-173     SymmetricTensor<4,dim> sym\_tensor;
-174     Assert(\hyperlink{functions_8h_aa37f13547b984cb066e2fcb530b36425}{symmetry\_check}(tensor), ExcMessage(\textcolor{stringliteral}{"Tensor to symmetrize is not symmetric!"}));
-175 
-176     Tensor<4,dim> temp\_tensor;
-177     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
-178         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)
-179             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
-180                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)
-181                     temp\_tensor[i][j][k][l] = (tensor[i][j][k][l]+tensor[j][i][k][l]+tensor[i][j][l][k]) / 
+209                                                               \{
+210     SymmetricTensor<4,dim> sym\_tensor;
+211     Assert(\hyperlink{functions_8h_aa37f13547b984cb066e2fcb530b36425}{symmetry\_check}(tensor), ExcMessage(\textcolor{stringliteral}{"Tensor to symmetrize is not symmetric!"}));
+212 
+213     Tensor<4,dim> temp\_tensor;
+214     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
+215         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)
+216             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
+217                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)
+218                     temp\_tensor[i][j][k][l] = (tensor[i][j][k][l]+tensor[j][i][k][l]+tensor[i][j][l][k]) / 
       3.0;
-182 
-183     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
-184         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=i; j<dim; ++j)
-185             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
-186                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l)
-187                     sym\_tensor[i][j][k][l] = temp\_tensor[i][j][k][l];
-188 \textcolor{comment}{//                    sym\_tensor[i][j][k][l] = tensor[i][j][k][l];}
-189 
-190     \textcolor{keywordflow}{return} sym\_tensor;
-191 \}
+219 
+220     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)
+221         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=i; j<dim; ++j)
+222             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)
+223                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=k; l<dim; ++l)
+224                     sym\_tensor[i][j][k][l] = temp\_tensor[i][j][k][l];
+225 \textcolor{comment}{//                    sym\_tensor[i][j][k][l] = tensor[i][j][k][l];}
+226 
+227     \textcolor{keywordflow}{return} sym\_tensor;
+228 \}
 \end{DoxyCode}
 \index{functions.\+h@{functions.\+h}!symmetry\+\_\+check@{symmetry\+\_\+check}}
 \index{symmetry\+\_\+check@{symmetry\+\_\+check}!functions.\+h@{functions.\+h}}
@@ -190,18 +285,18 @@ Referenced by ln\+\_\+space\+::post\+\_\+ln(), ln\+\_\+space\+::pre\+\_\+ln(), a
 )}\hypertarget{functions_8h_aa37f13547b984cb066e2fcb530b36425}{}\label{functions_8h_aa37f13547b984cb066e2fcb530b36425}
 
 
-Referenced by ln\+\_\+space\+::post\+\_\+ln(), Constitutive\+\_\+\+Laws\+::\+Thermo\+\_\+\+Elasto\+\_\+\+Plastic$<$ dim $>$\+::return\+\_\+stress\+\_\+tangent\+\_\+int\+\_\+variables\+\_\+for\+\_\+large\+\_\+strain(), and symmetrize().
+Referenced by ln\+\_\+space$<$ dim $>$\+::post\+\_\+ln(), and symmetrize().
 
 
 \begin{DoxyCode}
-102 \{
-103     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; i++ )
-104         \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; j++ )
-105             \textcolor{keywordflow}{if} ( i!=j && ( std::abs(tensor[i][j] - tensor[j][i])>1e-12 ) )
-106                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
-107 
-108     \textcolor{keywordflow}{return} \textcolor{keyword}{true};
-109 \}
+164 \{
+165     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; i++ )
+166         \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; j++ )
+167             \textcolor{keywordflow}{if} ( i!=j && ( std::abs(tensor[i][j] - tensor[j][i])>1e-12 ) )
+168                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+169 
+170     \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+171 \}
 \end{DoxyCode}
 \index{functions.\+h@{functions.\+h}!symmetry\+\_\+check@{symmetry\+\_\+check}}
 \index{symmetry\+\_\+check@{symmetry\+\_\+check}!functions.\+h@{functions.\+h}}
@@ -212,39 +307,39 @@ Referenced by ln\+\_\+space\+::post\+\_\+ln(), Constitutive\+\_\+\+Laws\+::\+The
 )}\hypertarget{functions_8h_adaf42311602a831f5c8c0fffdbb8aa63}{}\label{functions_8h_adaf42311602a831f5c8c0fffdbb8aa63}
 
 \begin{DoxyCode}
-123                                               \{
-124     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)\{
-125         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)\{
-126             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)\{
-127                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)\{
-128                     \textcolor{comment}{// absolute difference check}
-129                     \textcolor{keywordflow}{if}(    ( fabs(temp[i][j][k][l] - temp[j][i][k][l]) > 1e-6 )
-130                             ||
-131                           ( fabs(temp[i][j][k][l] - temp[i][j][l][k]) > 1e-6 ) )
-132                     \{
-133                         \textcolor{comment}{// relative difference check}
-134                         \textcolor{keywordflow}{if}( (fabs(fabs(temp[i][j][k][l] - temp[j][i][k][l])/temp[j][i][k][l])> 1e-8)
-135                             ||
-136                           (fabs(fabs(temp[i][j][k][l] - temp[i][j][l][k])/temp[i][j][l][k]) >1e-8) )
-137                         \{
-138                             deallog<< std::endl;
-139                             deallog<< \textcolor{stringliteral}{"Abs not matching: "}<<fabs(temp[i][j][k][l] - temp[j][i][k][l])
-140                                 << \textcolor{stringliteral}{" | Rel not matching: "}<<fabs(temp[i][j][k][l] - temp[j][i][k][l])/temp[
+173                                               \{
+174     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<dim; ++i)\{
+175         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j=0; j<dim; ++j)\{
+176             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k=0; k<dim; ++k)\{
+177                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l=0; l<dim; ++l)\{
+178                     \textcolor{comment}{// absolute difference check}
+179                     \textcolor{keywordflow}{if}(    ( fabs(temp[i][j][k][l] - temp[j][i][k][l]) > 1e-6 )
+180                             ||
+181                           ( fabs(temp[i][j][k][l] - temp[i][j][l][k]) > 1e-6 ) )
+182                     \{
+183                         \textcolor{comment}{// relative difference check}
+184                         \textcolor{keywordflow}{if}( (fabs(fabs(temp[i][j][k][l] - temp[j][i][k][l])/temp[j][i][k][l])> 1e-8)
+185                             ||
+186                           (fabs(fabs(temp[i][j][k][l] - temp[i][j][l][k])/temp[i][j][l][k]) >1e-8) )
+187                         \{
+188                             deallog<< std::endl;
+189                             deallog<< \textcolor{stringliteral}{"Abs not matching: "}<<fabs(temp[i][j][k][l] - temp[j][i][k][l])
+190                                 << \textcolor{stringliteral}{" | Rel not matching: "}<<fabs(temp[i][j][k][l] - temp[j][i][k][l])/temp[
       j][i][k][l]
-141                                 << \textcolor{stringliteral}{" | Abs not matching: "}<<fabs(temp[i][j][k][l] - temp[i][j][l][k])
-142                                 << \textcolor{stringliteral}{" | Rel not matching: "}<<fabs(temp[i][j][k][l] - temp[i][j][l][k])/temp[
+191                                 << \textcolor{stringliteral}{" | Abs not matching: "}<<fabs(temp[i][j][k][l] - temp[i][j][l][k])
+192                                 << \textcolor{stringliteral}{" | Rel not matching: "}<<fabs(temp[i][j][k][l] - temp[i][j][l][k])/temp[
       i][j][l][k]
-143                                 << \textcolor{stringliteral}{" | value ijkl: "}<< std::scientific << temp[i][j][k][l]
-144                                 << \textcolor{stringliteral}{" | value jikl: "}<< std::scientific << temp[j][i][k][l]
-145                                 << \textcolor{stringliteral}{" | value ijlk: "}<< std::scientific << temp[i][j][l][k]
-146                                 << std::endl;
-147                             \textcolor{keywordflow}{return} \textcolor{keyword}{false};
-148                         \}
-149                     \}
-150                 \}
-151             \}
-152         \}
-153     \}
-154     \textcolor{keywordflow}{return} \textcolor{keyword}{true};
-155 \}
+193                                 << \textcolor{stringliteral}{" | value ijkl: "}<< std::scientific << temp[i][j][k][l]
+194                                 << \textcolor{stringliteral}{" | value jikl: "}<< std::scientific << temp[j][i][k][l]
+195                                 << \textcolor{stringliteral}{" | value ijlk: "}<< std::scientific << temp[i][j][l][k]
+196                                 << std::endl;
+197                             \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+198                         \}
+199                     \}
+200                 \}
+201             \}
+202         \}
+203     \}
+204     \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+205 \}
 \end{DoxyCode}

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['thermo_5felasto_5fplastic',['Thermo_Elasto_Plastic',['../classConstitutive__Laws_1_1Thermo__Elasto__Plastic.html#a341bfb61aa9e1c3c95a2e423730e397c',1,'Constitutive_Laws::Thermo_Elasto_Plastic']]]
+  ['symmetrize',['symmetrize',['../functions_8h.html#afe83e9509497294b7f662b800b6b91ff',1,'functions.h']]],
+  ['symmetry_5fcheck',['symmetry_check',['../functions_8h.html#aa37f13547b984cb066e2fcb530b36425',1,'symmetry_check(Tensor&lt; 2, dim &gt; &amp;tensor):&#160;functions.h'],['../functions_8h.html#adaf42311602a831f5c8c0fffdbb8aa63',1,'symmetry_check(const Tensor&lt; 4, dim &gt; &amp;temp):&#160;functions.h']]]
 ];

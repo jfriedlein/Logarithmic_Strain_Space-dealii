@@ -1,0 +1,101 @@
+C++ code using the deal.\+ii library for the transformation into the logarithmic strain space
+
+(also available for Fortran, but not yet documented and uploaded)
+
+\subsection*{The goal/\+When to use this code}
+
+The logarithmic strain space (herein often abbreviated as ln-\/space) is a very simple (in terms of the application) way to apply small strain material models to finite strains. So, in case you have a small strain model that you would like to apply to applications exposed to large deformations/finite strains, the ln-\/space it probably the easiest way to achieve this.
+
+All you need are three steps as schematically (simplified) shown in the figure\+:
+\begin{DoxyEnumerate}
+\item Pre-\/processing from the world of finite strains into the logarithmic strain space
+\item Calling your small strain model with the Hencky strain computed in the pre-\/processing
+\item Post-\/processing the computed stress and tangent(s) by transforming them from the ln-\/space back into the real world. And the best is, steps 1 and 3 are always the same (copy-\/paste) and the second step is the same as done for the small strain implementation.
+\end{DoxyEnumerate}
+
+
+
+Drawbacks?
+
+Especially step 3, the post-\/processing is expensive independent of your material model. So, as far as efficiency is concerned, a simple material model utilising the ln-\/space is most certainly slower, than its derived finite strain equivalent (a model that was developed for finite strains). However, for complicated material models it can be faster to use the small strain model in the ln-\/space, instead of a finite strain equivalent (and it requires no further derivations/development to get from small to finite strains). Another disadvantage, is the limitation to small elastic strains. The latter is usually satisfied for metal forming and similar applications, where elastic strain are small and large plastic strain occur.
+
+\subsection*{Background}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]add some equations\end{DoxyRefDesc}
+
+
+The transformation consists of three steps. First, we transform the deformation gradient {\ttfamily F} into the logarithmic strain space (ln-\/space) and obtain the Hencky strain (preprocessing). Secondly, the standard small strain material model is called using the Hencky strain and the usual history. The outcome is the stress measure {\ttfamily T} and the fourth order tangent {\ttfamily C}. Finally, we transform the stress and tangent modulus back from the logarithmic strain space to obtain e.\+g. the Second Piola-\/\+Kirchhoff stress tensor {\ttfamily S}and the Lagrangian tangent modulus {\ttfamily L} (postprocessing).
+
+\subsection*{Interface/\+How to use this code}
+
+
+\begin{DoxyItemize}
+\item Add the \hyperlink{classln__space}{ln\+\_\+space} header files (.h) and auxiliary functions from this repository to your working directory.
+\item Include the header \char`\"{}ln\+\_\+space.\+h\char`\"{} in your code
+\item Create an instance of the \hyperlink{classln__space}{ln\+\_\+space} class 
+\begin{DoxyCode}
+1 ln\_space<dim> ln\_space;
+\end{DoxyCode}
+
+\item Execute the preprocessing step using the deformation gradient as input 
+\begin{DoxyCode}
+1 ln\_space.pre\_ln(F);
+\end{DoxyCode}
+
+\item Get the Hencky strain {\ttfamily hencky\+\_\+strain} from the \hyperlink{classln__space}{ln\+\_\+space} and call your material model (e.\+g. elastoplasticity(...)) with the Hencky strain as the input strain 
+\begin{DoxyCode}
+1 SymmetricTensor<2,dim> hencky\_strain = ln\_space.hencky\_strain;
+2 SymmetricTensor<4,3> tangent = elastoplasticity(/*input->*/ hencky\_strain, history, /*output->*/ T\_stress);
+\end{DoxyCode}
+
+\item Execute the postprocessing using the computed {\ttfamily T\+\_\+stress} and tangent as input 
+\begin{DoxyCode}
+1 ln\_space.post\_ln(T\_stress,tangent);
+\end{DoxyCode}
+
+\item Extract the Second Piola-\/\+Kirchhoff stress tensor {\ttfamily stress\+\_\+S} and the Lagrangian tangent modulus {\ttfamily L} 
+\begin{DoxyCode}
+1 SymmetricTensor<2,dim> stress\_S = ln\_space.second\_piola\_stress\_S;
+2 SymmetricTensor<4,dim> L = ln\_space.C;
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\subsection*{The code/ A look under the hood}
+
+The documentation for the ln-\/space code can be found here \href{https://jfriedlein.github.io/Logarithmic_Strain_Space-dealii/html/namespaceln__space.html}{\tt https\+://jfriedlein.\+github.\+io/\+Logarithmic\+\_\+\+Strain\+\_\+\+Space-\/dealii/html/namespaceln\+\_\+\+\_\+space.\+html}.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]Create a proper mainpage instead of this namespace-\/thing\end{DoxyRefDesc}
+
+
+\subsection*{References and Literature}
+
+
+\begin{DoxyItemize}
+\item papers on the algorithms\+:
+\begin{DoxyItemize}
+\item Miehe, C. and Lambrecht, M. (2001), Algorithms for computation of stresses and elasticity moduli in terms of Seth–\+Hill\textquotesingle{}s family of generalized strain tensors. Commun. Numer. Meth. Engng., 17\+: 337-\/353. doi\+:10.\+1002/cnm.404
+\item Miehe, C. \& Apel, N. \& Lambrecht, M.. (2002). Anisotropic additive plasticity in the logarithmic strain space\+: Modular kinematic formulation and implementation based on incremental minimization principles for standard materials. Computer Methods in Applied Mechanics and Engineering -\/ C\+O\+M\+P\+UT M\+E\+T\+H\+OD A\+P\+PL M\+E\+CH E\+NG. 191. 5383-\/5425. 10.\+1016/\+S0045-\/7825(02)00438-\/3.
+\end{DoxyItemize}
+\item papers on the application\+:
+\begin{DoxyItemize}
+\item ...
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsection*{To\+Do}
+
+
+\begin{DoxyItemize}
+\item rename variables, e.\+g. \textquotesingle{}C\textquotesingle{} should be lagrangian tangent ...
+\item avoid directly accessing the member variables, use access functions instead, e.\+g. with const return values
+\item merge the for-\/loops in the 2D pre\+\_\+ln
+\item check which header files are needed
+\item pack all needed external functions into an own auxiliary script (maybe requires namespace to avoid overloading)
+\item add a remark on how to handle the 2D case (extract\+\_\+dim, ...)
+\item add an intro text
+\item complete the documentation (comments)
+\item maybe add an example of a basic code calling the matmod with the ln-\/space (e.\+g. deal.\+ii example expanded to finite strains) 
+\end{DoxyItemize}

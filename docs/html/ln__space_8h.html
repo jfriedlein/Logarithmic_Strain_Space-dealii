@@ -44,7 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -88,8 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
 <div class="title">ln_space.h File Reference</div>  </div>
 </div><!--header-->
@@ -100,30 +99,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &quot;<a class="el" href="functions_8h_source.html">functions.h</a>&quot;</code><br />
+<code>#include &quot;../MA-Code/auxiliary_functions/StandardTensors.h&quot;</code><br />
+<code>#include &quot;../MA-Code/auxiliary_functions/tensor_operators.h&quot;</code><br />
+<code>#include &quot;../MA-Code/auxiliary_functions/auxiliary_functions.h&quot;</code><br />
+<code>#include &quot;../2D_axial-symmetry_plane-strain_dealii/handling_2D.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ln_space.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="ln__space_8h__incl.png" border="0" usemap="#ln__space_8h" alt=""/></div>
 <map name="ln__space_8h" id="ln__space_8h">
-<area shape="rect" id="node7" href="functions_8h.html" title="functions.h" alt="" coords="423,87,510,114"/>
+<area shape="rect" id="node7" href="functions_8h.html" title="functions.h" alt="" coords="423,95,510,121"/>
 </map>
 </div>
 </div>
 <p><a href="ln__space_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespaceln__space"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceln__space.html">ln_space</a></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classln__space.html">ln_space&lt; dim &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a85e361462746b126386ad7e1d608e7d8"><td class="memTemplParams" colspan="2">template&lt;int dim&gt; </td></tr>
-<tr class="memitem:a85e361462746b126386ad7e1d608e7d8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceln__space.html#a85e361462746b126386ad7e1d608e7d8">ln_space::pre_ln</a> (Tensor&lt; 2, dim &gt; &amp;F, SymmetricTensor&lt; 2, dim &gt; &amp;hencky_strain, Vector&lt; double &gt; &amp;ea, Vector&lt; double &gt; &amp;da, Vector&lt; double &gt; &amp;fa, std::vector&lt; Tensor&lt; 1, dim &gt; &gt; &amp;eigenvector, Vector&lt; double &gt; &amp;eigenvalues, std::vector&lt; SymmetricTensor&lt; 2, dim &gt; &gt; &amp;eigenbasis)</td></tr>
-<tr class="separator:a85e361462746b126386ad7e1d608e7d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f5e3bde0b1ee47f3dbc5977b4653342"><td class="memTemplParams" colspan="2">template&lt;int dim&gt; </td></tr>
-<tr class="memitem:a0f5e3bde0b1ee47f3dbc5977b4653342"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceln__space.html#a0f5e3bde0b1ee47f3dbc5977b4653342">ln_space::post_ln</a> (Vector&lt; double &gt; &amp;ea, Vector&lt; double &gt; &amp;da, Vector&lt; double &gt; &amp;fa, Vector&lt; double &gt; &amp;eigenvalues, std::vector&lt; SymmetricTensor&lt; 2, dim &gt; &gt; &amp;eigenbasis, SymmetricTensor&lt; 2, dim &gt; &amp;second_piola_stress_S, SymmetricTensor&lt; 4, dim &gt; &amp;elasto_plastic_tangent)</td></tr>
-<tr class="separator:a0f5e3bde0b1ee47f3dbc5977b4653342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

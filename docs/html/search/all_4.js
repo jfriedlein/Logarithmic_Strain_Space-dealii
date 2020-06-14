@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['i',['I',['../classConstitutive__Laws_1_1Thermo__Elasto__Plastic.html#a82407b5024a6bdd7dc424dfa3562acf6',1,'Constitutive_Laws::Thermo_Elasto_Plastic']]],
-  ['ixi',['IxI',['../classConstitutive__Laws_1_1Thermo__Elasto__Plastic.html#a3e093ae5b5ef432f1f4fea14148dd8e1',1,'Constitutive_Laws::Thermo_Elasto_Plastic']]]
+  ['get_5ftensor_5foperator_5ff_5fleft',['get_tensor_operator_F_left',['../functions_8h.html#a6f9435c7728281851248d3537c100e7d',1,'functions.h']]],
+  ['get_5ftensor_5foperator_5ff_5fright',['get_tensor_operator_F_right',['../functions_8h.html#acfd8da38df3766246f7bcf0e736ad9f4',1,'functions.h']]],
+  ['get_5ftensor_5foperator_5fg',['get_tensor_operator_G',['../functions_8h.html#a6e649771188b6d625bea6309e77fbd16',1,'functions.h']]]
 ];
