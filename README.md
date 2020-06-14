@@ -50,7 +50,7 @@ The transformation consists of three steps. First, we transform the deformation 
 ```
 
 ## The code/ A look under the hood
-The documentation for the ln-space code can be found here https://jfriedlein.github.io/Logarithmic_Strain_Space-dealii/html/namespaceln__space.html.
+The documentation for the ln-space code can be found here https://jfriedlein.github.io/Logarithmic_Strain_Space-dealii/html/classln__space.html.
 
 @todo Create a proper mainpage instead of this namespace-thing
 
@@ -60,6 +60,9 @@ The documentation for the ln-space code can be found here https://jfriedlein.git
     * Miehe, C. & Apel, N. & Lambrecht, M.. (2002). Anisotropic additive plasticity in the logarithmic strain space: Modular kinematic formulation and implementation based on incremental minimization principles for standard materials. Computer Methods in Applied Mechanics and Engineering - COMPUT METHOD APPL MECH ENG. 191. 5383-5425. 10.1016/S0045-7825(02)00438-3. 
 * papers on the application:
     * ...
+
+## Credits
+A huge thanks to Christian Burkhardt for implementing the algorithms outlined in the papers by Miehe et al. into C++ (and making sense of the immense (and partly insane) index notation). So I just had to organise the code into a class and add the 2D case.
 
 ## ToDo
 * rename variables, e.g. 'C' should be lagrangian tangent ...
