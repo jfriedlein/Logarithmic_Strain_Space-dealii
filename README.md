@@ -55,11 +55,13 @@ The documentation for the ln-space code can be found here https://jfriedlein.git
 @todo Create a proper mainpage instead of this namespace-thing
 
 ## References and Literature
-* papers on the algorithms:
+* papers on the algorithms and application:
     * Miehe, C. and Lambrecht, M. (2001), Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill's family of generalized strain tensors. Commun. Numer. Meth. Engng., 17: 337-353. doi:10.1002/cnm.404
-    * Miehe, C. & Apel, N. & Lambrecht, M.. (2002). Anisotropic additive plasticity in the logarithmic strain space: Modular kinematic formulation and implementation based on incremental minimization principles for standard materials. Computer Methods in Applied Mechanics and Engineering - COMPUT METHOD APPL MECH ENG. 191. 5383-5425. 10.1016/S0045-7825(02)00438-3. 
-* papers on the application:
-    * ...
+    * Miehe, C. & Apel, N. & Lambrecht, M.. (2002). Anisotropic additive plasticity in the logarithmic strain space: Modular kinematic formulation and implementation based on incremental minimization principles for standard materials. Computer Methods in Applied Mechanics and Engineering - COMPUT METHOD APPL MECH ENG. 191. 5383-5425. 10.1016/S0045-7825(02)00438-3.
+    * Apel, N.: Approaches to the description of anisotropic material behaviour at finite
+elastic and plastic deformations. Stuttgart, Universität Stuttgart, 2004. (more comprehensive than Miehe et al papers)
+    * Schmaltz, S. (2015). Inverse Materialparameteridentifikation von Blechwerkstoffen für ein anisotropes elasto-plastisches Materialmodell bei finiten Deformationen. [PDF](urn:nbn:de:bvb:29-opus4-58089) (great outline of algorithms and implementation)
+
 
 ## Credits
 A huge thanks to Christian Burkhardt for implementing the algorithms outlined in the papers by Miehe et al. into C++ (and making sense of the immense (and partly insane) index notation). So I just had to organise the code into a class and add the 2D case.
