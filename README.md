@@ -4,7 +4,7 @@ C++ code using the deal.ii library for the transformation into the logarithmic s
 (also available for Fortran, but not yet documented and uploaded)
 
 ## The goal/When to use this code
-The logarithmic strain space (herein often abbreviated as ln-space) is a very simple (in terms of the application) way to apply small strain material models to finite strains. So, in case you have a small strain model that you would like to apply to applications exposed to large deformations/finite strains, the ln-space it probably the easiest way to achieve this.
+The logarithmic strain space (herein often abbreviated as ln-space) is a very simple (in terms of the application) way to apply small strain material models to finite strains. So, in case you have a small strain model that you would like to use for applications exposed to large deformations/finite strains, the ln-space it probably the easiest way to achieve this.
 
 All you need are three steps as schematically (simplified) shown in the figure:
 1. Pre-processing from the world of finite strains into the logarithmic strain space
