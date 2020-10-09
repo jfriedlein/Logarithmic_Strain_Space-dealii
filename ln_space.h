@@ -37,8 +37,7 @@ class ln_space
 	SymmetricTensor<2,3> hencky_strain_3D; // full 3D components
 
 	// Contain dim components from the 3D quantities
-	 SymmetricTensor<2,dim> second_piola_stress_S;
-	 SymmetricTensor<4,dim> C;
+	 SymmetricTensor<2,3> second_piola_stress_S;
 	 SymmetricTensor<4,3> C_3D;
 
 	void pre_ln ( /*input->*/ Tensor<2,3> &F
@@ -373,9 +372,8 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 	// Compute the retransformed values
 	 second_piola_stress_S = stress_measure_T_sym * projection_tensor_P_sym;
 
-	 C = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
+	 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
 							  + projection_tensor_T_doublecon_L_sym;
-	 C_3D = C;
 }
 
 
@@ -488,16 +486,10 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	 SymmetricTensor<4,3> projection_tensor_T_doublecon_L_sym = symmetrize(projection_tensor_T_doublecon_L);
 
 	// Compute the retransformed values
-	 {
-		 SymmetricTensor<2,3> stress_S_3D = stress_measure_T_sym * projection_tensor_P_sym;
-		 second_piola_stress_S = extract_dim<2> ( stress_S_3D );
-	 }
-	 {
-		 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
-				+ projection_tensor_T_doublecon_L_sym;
+	 second_piola_stress_S = stress_measure_T_sym * projection_tensor_P_sym;
 
-		 C = extract_dim<2> ( C_3D );
-	 }
+	 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
+			+ projection_tensor_T_doublecon_L_sym;
 }
 
 /*
