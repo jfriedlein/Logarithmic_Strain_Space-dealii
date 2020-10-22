@@ -40,7 +40,7 @@ class ln_space
 	 SymmetricTensor<2,3> second_piola_stress_S;
 	 SymmetricTensor<4,3> C_3D;
 
-	void pre_ln ( /*input->*/ Tensor<2,3> &F
+	void pre_ln ( /*input->*/ const Tensor<2,3> &F
 				  /*output->*/ );
 
 	void post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent
@@ -84,7 +84,7 @@ fa(3)
 
 // 2D and 3D
 template<int dim>
-void ln_space<dim>::pre_ln ( /*input->*/ Tensor<2,3> &F /*output->hencky_strain, eigenvalues, eigenvector, eigenbasis, ea, da, fa*/ )
+void ln_space<dim>::pre_ln ( /*input->*/ const Tensor<2,3> &F /*output->hencky_strain, eigenvalues, eigenvector, eigenbasis, ea, da, fa*/ )
 {
 	// Following
 	// "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors"
