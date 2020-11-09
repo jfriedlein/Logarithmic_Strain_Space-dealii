@@ -27,6 +27,12 @@
 
 using namespace dealii;
 
+/**
+ * @note CONVENTION: We explicitly don't use the Lagrangian tangent defined as \f$ C = 2 \frac{\partial S}{\partial C} \f$,
+ * but only the derivative \f$ \frac{\partial S}{\partial C} \f$. Similarly, additional tangent contributions as
+ * \f$ \frac{\partial (\bullet)}{\partial C} \f$ are computed and provided without (!) the factor of two. Hence, make
+ * sure that your assembly routine incorporates the factor of 2 for instance in the linearisation of RCG.
+ */
 template <int dim>
 class ln_space
 {
@@ -38,7 +44,7 @@ class ln_space
 
 	// Contain dim components from the 3D quantities
 	 SymmetricTensor<2,3> second_piola_stress_S;
-	 SymmetricTensor<4,3> C_3D;
+	 SymmetricTensor<4,3> dS_dC_3D;
 
 	void pre_ln ( /*input->*/ const Tensor<2,3> &F
 				  /*output->*/ );
@@ -46,7 +52,8 @@ class ln_space
 	void post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent
 				   /*output->second_piola_stress_S, C*/ );
 
-	SymmetricTensor<2,3> post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
+	SymmetricTensor<2,3> post_transform_strain ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
+	SymmetricTensor<2,3> post_transform_stress ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
 
 	SymmetricTensor<2,3> plastic_right_cauchy_green_AS (SymmetricTensor<2,dim> plastic_hencky_strain);
 
@@ -372,8 +379,9 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 	// Compute the retransformed values
 	 second_piola_stress_S = stress_measure_T_sym * projection_tensor_P_sym;
 
-	 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
-							  + projection_tensor_T_doublecon_L_sym;
+	// Factor 0.5 to get the sole dS_dC derivative
+	 dS_dC_3D = 0.5 * ( projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
+							  + projection_tensor_T_doublecon_L_sym );
 }
 
 
@@ -488,18 +496,33 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	// Compute the retransformed values
 	 second_piola_stress_S = stress_measure_T_sym * projection_tensor_P_sym;
 
-	 C_3D = projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
-			+ projection_tensor_T_doublecon_L_sym;
+	 dS_dC_3D = 0.5 * ( projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
+			 	 	 	+ projection_tensor_T_doublecon_L_sym );
 }
+
 
 /*
  * Transform the given second order tensor from the ln-space into the real world
  * works for e.g. @todo fin
+ * \f$ \frac{\partial (\bullet)}{\partial C} \f$
  */
 template<int dim>
-SymmetricTensor<2,3> ln_space<dim>::post_transform ( /*input->*/ SymmetricTensor<2,3> &ln_tensor)
+SymmetricTensor<2,3> ln_space<dim>::post_transform_strain ( /*input->*/ SymmetricTensor<2,3> &ln_tensor)
 {
-	return ln_tensor * projection_tensor_P_sym;
+	// The factor 0.5 ensures that we get \f$ \frac{\partial (\bullet)}{\partial C} \f$ and not "2*"
+	return 0.5 * ln_tensor * projection_tensor_P_sym;
+}
+
+
+/*
+ * Transform the given second order tensor from the ln-space into the real world
+ * works for e.g. @todo fin
+ * \f$ \frac{\partial T}{\partial (\bullet)} \f$
+ */
+template<int dim>
+SymmetricTensor<2,3> ln_space<dim>::post_transform_stress ( /*input->*/ SymmetricTensor<2,3> &ln_tensor)
+{
+	return 1. * ln_tensor * projection_tensor_P_sym;
 }
 
 
