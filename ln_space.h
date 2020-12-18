@@ -55,7 +55,7 @@ class ln_space
 	SymmetricTensor<2,3> post_transform_strain ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
 	SymmetricTensor<2,3> post_transform_stress ( /*input->*/ SymmetricTensor<2,3> &ln_tensor);
 
-	SymmetricTensor<2,3> plastic_right_cauchy_green_AS (SymmetricTensor<2,dim> plastic_hencky_strain);
+	SymmetricTensor<2,3> plastic_right_cauchy_green_AS (SymmetricTensor<2,3> plastic_hencky_strain);
 
   private:
   	 Vector<double> eigenvalues;
@@ -525,14 +525,14 @@ SymmetricTensor<2,3> ln_space<dim>::post_transform_stress ( /*input->*/ Symmetri
 	return 1. * ln_tensor * projection_tensor_P_sym;
 }
 
-
-template<int dim>
-SymmetricTensor<2,3> ln_space<dim>::plastic_right_cauchy_green_AS (SymmetricTensor<2,dim> plastic_hencky_strain)
+// @todo-assure Still not verified, How?
+template <int dim>
+SymmetricTensor<2,3> ln_space<dim>::plastic_right_cauchy_green_AS (SymmetricTensor<2,3> plastic_hencky_strain)
 {
-	AssertThrow( false, ExcMessage("plastic_right_cauchy_green_AS<< Sorry. Even though the algorithm "
-								   "to compute the plastic RCG tensor was tested, the implementation into this "
-								   "ln-space class has not been tested at all. So either you have enough faith to "
-								   "simply remove this AssertThrow in the code or you do some testing to validate the function yourself."));
+//	AssertThrow( false, ExcMessage("plastic_right_cauchy_green_AS<< Sorry. Even though the algorithm "
+//								   "to compute the plastic RCG tensor was tested, the implementation into this "
+//								   "ln-space class has not been tested at all. So either you have enough faith to "
+//								   "simply remove this AssertThrow in the code or you do some testing to validate the function yourself."));
 
 	// Compute the eigenvalues and eigenvectors of the plastic hencky strain
 	 Vector<double> eigenvalues_pl(3);
