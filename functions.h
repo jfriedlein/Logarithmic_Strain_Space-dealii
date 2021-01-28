@@ -206,9 +206,10 @@ bool symmetry_check(const Tensor<4,dim> &temp){
 
 
 template<int dim>
-SymmetricTensor<4,dim> symmetrize(const Tensor<4,dim> &tensor){
+SymmetricTensor<4,dim> symmetrize(const Tensor<4,dim> &tensor, const bool sym_check=false ){
     SymmetricTensor<4,dim> sym_tensor;
-    Assert(symmetry_check(tensor), ExcMessage("Tensor to symmetrize is not symmetric!"));
+    if ( sym_check==true )
+    	Assert(symmetry_check(tensor), ExcMessage("Tensor to symmetrize is not symmetric!"));
 
     Tensor<4,dim> temp_tensor;
     for(unsigned int i=0; i<dim; ++i)
@@ -226,5 +227,22 @@ SymmetricTensor<4,dim> symmetrize(const Tensor<4,dim> &tensor){
 
     return sym_tensor;
 }
+
+
+template<int dim>
+SymmetricTensor<4,dim> symmetrize_minorSym(const Tensor<4,dim> &tensor, const bool sym_check=false ){
+    SymmetricTensor<4,dim> sym_tensor;
+//    if ( sym_check==true )
+//    	Assert(symmetry_check(tensor), ExcMessage("Tensor to symmetrize is not symmetric!"));
+
+    for(unsigned int i=0; i<dim; ++i)
+        for(unsigned int j=i; j<dim; ++j)
+            for(unsigned int k=0; k<dim; ++k)
+                for(unsigned int l=k; l<dim; ++l)
+                    sym_tensor[i][j][k][l] = tensor[i][j][k][l];
+
+    return sym_tensor;
+}
+
 
 #endif 
