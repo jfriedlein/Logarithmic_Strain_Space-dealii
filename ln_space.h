@@ -46,6 +46,8 @@ class ln_space
 	 SymmetricTensor<2,3> second_piola_stress_S;
 	 SymmetricTensor<4,3> dS_dC_3D;
 
+	bool processing_failed = false;
+
 	void pre_ln ( /*input->*/ const Tensor<2,3> &F
 				  /*output->*/ );
 
@@ -107,9 +109,27 @@ void ln_space<dim>::pre_ln ( /*input->*/ const Tensor<2,3> &F /*output->hencky_s
 	// Compute Eigenvalues, Eigenvectors and Eigenbasis
 	 {
 		// Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
-		for (unsigned int i = 0; i < 3; ++i) {
-			eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
-			eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
+		for (unsigned int i = 0; i < 3; ++i)
+		{
+			try
+			{
+				eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
+				eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
+			}
+			catch (std::exception &exc)
+			{
+			  std::cerr << std::endl
+						<< "----------------------------------------------------"
+						<< std::endl;
+			  std::cerr << "GG<< pre_ln(*) failed to find eigenvalues or eigenvectors for the given tensor. "
+					  	   "Aborting the current load step and trying a restart with a reduced load increment." << std::endl
+						<< "----------------------------------------------------"
+						<< std::endl;
+
+			  processing_failed = true;
+
+			  return;
+			}
 		}
 
 		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
