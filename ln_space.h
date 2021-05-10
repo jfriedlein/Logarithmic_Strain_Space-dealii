@@ -108,29 +108,36 @@ void ln_space<dim>::pre_ln ( /*input->*/ const Tensor<2,3> &F /*output->hencky_s
 
 	// Compute Eigenvalues, Eigenvectors and Eigenbasis
 	 {
-		// Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
-		for (unsigned int i = 0; i < 3; ++i)
-		{
-			try
-			{
-				eigenvalues[i] = eigenvectors(right_cauchy_green_sym)[i].first;
-				eigenvector[i] = eigenvectors(right_cauchy_green_sym)[i].second;
-			}
-			catch (std::exception &exc)
-			{
+		 // array of pairs with EW double, EV tensor, 3 array entries
+		  std::array< std::pair< double, Tensor<1, dim> >, 3 > eigenlist;
+
+		 // Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
+		 // determine the eigenvalues and eigenvectors all at once and save both entries of the pair
+		  try
+		  {
+			  eigenlist = eigenvectors(right_cauchy_green_sym);
+		  }
+		  catch (std::exception &exc)
+		  {
 			  std::cerr << std::endl
 						<< "----------------------------------------------------"
 						<< std::endl;
 			  std::cerr << "GG<< pre_ln(*) failed to find eigenvalues or eigenvectors for the given tensor. "
-					  	   "Aborting the current load step and trying a restart with a reduced load increment." << std::endl
+						   "Aborting the current load step and trying a restart with a reduced load increment." << std::endl
 						<< "----------------------------------------------------"
 						<< std::endl;
 
 			  processing_failed = true;
 
 			  return;
-			}
-		}
+		  }
+
+		// Store the values in a nicer format
+		 for (unsigned int i = 0; i < 3; ++i)
+		 {
+			eigenvalues[i] = eigenlist[i].first;
+			eigenvector[i] = eigenlist[i].second;
+		 }
 
 		// The deal.ii function \a eigenvectors return the EWe in descending order, but in Miehe et al. the C33 EW
 		// shall belong to lambda_3, hence we search for the EW that equals C33
