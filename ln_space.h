@@ -109,7 +109,7 @@ void ln_space<dim>::pre_ln ( /*input->*/ const Tensor<2,3> &F /*output->hencky_s
 	// Compute Eigenvalues, Eigenvectors and Eigenbasis
 	 {
 		 // array of pairs with EW double, EV tensor, 3 array entries
-		  std::array< std::pair< double, Tensor<1, dim> >, 3 > eigenlist;
+		  std::array< std::pair< double, Tensor<1, 3> >, 3 > eigenlist;
 
 		 // Get Eigenvalues and Eigenvectors from the deal.ii function \a eigenvectors(*)
 		 // determine the eigenvalues and eigenvectors all at once and save both entries of the pair
@@ -347,7 +347,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 
 	/*
-	 * 4. Lagrangian stresses and elasticity moduli
+	 * 4. Lagrangian stresses and moduli
 	 */
 
 	 std::vector< SymmetricTensor<4,3> > Ma_x_Ma (3);
@@ -400,7 +400,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 	// Check whether the tensor is symmetric and store it into a \a SymmetricTensor
 	 Assert( symmetry_check(projection_tensor_T_doublecon_L),
-				  ExcMessage("ln-space<< Projection tensor T:L is not symmetric") );
+			 ExcMessage("ln-space<< Projection tensor T:L is not symmetric") );
 	 SymmetricTensor<4,3> projection_tensor_T_doublecon_L_sym = symmetrize(projection_tensor_T_doublecon_L);
 
 	// Compute the retransformed values
@@ -408,7 +408,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 	// Factor 0.5 to get the sole dS_dC derivative
 	 dS_dC_3D = 0.5 * ( projection_tensor_P_sym * elasto_plastic_tangent * projection_tensor_P_sym
-							  + projection_tensor_T_doublecon_L_sym );
+						+ projection_tensor_T_doublecon_L_sym );
 }
 
 
