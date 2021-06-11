@@ -51,6 +51,11 @@ class ln_space
 	void pre_ln ( /*input->*/ const Tensor<2,3> &F
 				  /*output->*/ );
 
+	/**
+	 * 2D variant based on "Algorithms for computation of stresses and elasticity moduli in terms of Seth–Hill’s family of generalized strain tensors" Table III
+	 * @param stress_measure_T_sym
+	 * @param elasto_plastic_tangent
+	 */
 	void post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_sym, SymmetricTensor<4,3> &elasto_plastic_tangent
 				   /*output->second_piola_stress_S, C*/ );
 
@@ -434,22 +439,22 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	 double beta = 999999999.0;
 
 	// For two different eigenvalues \f$ \lambda_a \neq \lambda_b \f$
-	 if (std::fabs(eigenvalues(0) - eigenvalues(1)) > comp_tolerance)
+	 if (std::fabs( eigenvalues(0) - eigenvalues(1) ) > comp_tolerance)
 	 {
-		beta = 2. * (ea[0]-ea[1]) / (eigenvalues(0) - eigenvalues(1));
+		beta = 2. * (ea[0]-ea[1]) / ( eigenvalues(0) - eigenvalues(1) );
 		for (unsigned int a = 0; a < 3; ++a)
 			gamma[a] = da[a] - beta;
 		for (unsigned int alpha = 0; alpha < 2; ++alpha)
-			kappa[alpha] = 2. * gamma[alpha] / (eigenvalues(0) - eigenvalues(1));
+			kappa[alpha] = 2. * gamma[alpha] / ( eigenvalues(0) - eigenvalues(1) );
 	 }
 	// For two equal eigenvalues a and b: \f$ \lambda_a = \lambda_b \f$
-	 else if (std::fabs(eigenvalues(0) - eigenvalues(1)) <= comp_tolerance)
+	 else if (std::fabs( eigenvalues(0) - eigenvalues(1) ) <= comp_tolerance)
 	 {
 		beta = da[0];
 		for (unsigned int a = 0; a < 3; ++a)
 			gamma[a] = da[a] - da[0];
 		for (unsigned int alpha = 0; alpha < 2; ++alpha)
-			kappa[alpha] = (1.5 - (alpha+1)) * fa[0]; // index alpha starts at 0, hence (alpha+1)
+			kappa[alpha] = ( 1.5 - (alpha+1) ) * fa[0]; // index alpha starts at 0, hence (alpha+1) to get the correct values of (1.5-alpha)
 	 }
 	 else
 	 {
@@ -477,14 +482,16 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	 Tensor<4,3> projection_tensor_P = beta * Tensor<4,3> (StandardTensors::II<3>());
 
 	 std::vector< SymmetricTensor<4,3> > Ma_x_Ma (3);
-	 // ToDo-optimize: check whether storing (M_a x M_a) saves some computation time, because we need it three times
+	 // ToDo-optimize: check whether storing (M_a x M_a) indeed saves some computation time,
+	 // because we need it three times
 	 for (unsigned int a = 0; a < 3; ++a)
 	 {
 		 Ma_x_Ma[a] = outer_product_sym(eigenbasis[a]);
-		 projection_tensor_P += gamma[a] * (Tensor<4,3>) Ma_x_Ma[a];
+		 projection_tensor_P += gamma[a] * Tensor<4,3> (Ma_x_Ma[a]);
 	 }
 
 	 projection_tensor_P_sym = symmetrize(projection_tensor_P);
+
 
 	// Compute the double contraction of T and L
 	 // ToDo-optimize: merge the for-loops
@@ -493,7 +500,7 @@ void ln_space<2>::post_ln ( /*input->*/ SymmetricTensor<2,3> &stress_measure_T_s
 	 {
 		projection_tensor_T_doublecon_L += fa(a)
 										   * zeta_a[a]
-										   * (Tensor<4,3>) Ma_x_Ma[a];
+										   * Tensor<4,3> (Ma_x_Ma[a]);
 	 }
 	 for (unsigned int alpha = 0; alpha < 2; ++alpha)
 	 {
