@@ -357,6 +357,7 @@ void ln_space<3>::post_ln ( /*output->*/ SymmetricTensor<2,3> &stress_measure_T_
 
 	 std::vector< SymmetricTensor<4,3> > Ma_x_Ma (3);
 	// Compute projection tensor P
+	// @todo optimize get_tensor_operator_G(a,b) should be the same as (b,a), compute this only once
 	 Tensor<4,3> projection_tensor_P;
 	 for (unsigned int a = 0; a < 3; ++a)
 	 {
