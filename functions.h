@@ -106,10 +106,10 @@ Tensor<4,dim> get_tensor_operator_F_left(const SymmetricTensor<2,dim> &Ma,
 #ifndef outer_product_sym_H
 #define outer_product_sym_H
 
-template<int dim>
-SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A, const SymmetricTensor<2,dim> &B )
+template<int dim, typename Number>
+SymmetricTensor<4,dim,Number> outer_product_sym( const SymmetricTensor<2,dim,Number> &A, const SymmetricTensor<2,dim,Number> &B )
 {
-	SymmetricTensor<4,dim> D;
+	SymmetricTensor<4,dim,Number> D;
 	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
 	// ToDo: still not optimal element 1112 and 1211 are both accessed
 	for ( unsigned int i=0; i<dim; ++i )
@@ -123,10 +123,10 @@ SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A, const
 				}
 	return D;
 }
-template<int dim>
-SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A )
+template<int dim, typename Number>
+SymmetricTensor<4,dim,Number> outer_product_sym( const SymmetricTensor<2,dim,Number> &A )
 {
-	SymmetricTensor<4,dim> D;
+	SymmetricTensor<4,dim,Number> D;
 	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
 	// ToDo: still not optimal element 1112 and 1211 are both accessed
 	for ( unsigned int i=0; i<dim; ++i )
@@ -140,10 +140,10 @@ SymmetricTensor<4,dim> outer_product_sym( const SymmetricTensor<2,dim> &A )
             	}
 	return D;
 }
-template<int dim>
-SymmetricTensor<2,dim> outer_product_sym( const Tensor<1,dim> &A )
+template<int dim, typename Number>
+SymmetricTensor<2,dim,Number> outer_product_sym( const Tensor<1,dim,Number> &A )
 {
-	SymmetricTensor<2,dim> D;
+	SymmetricTensor<2,dim,Number> D;
 	// Special nested for-loop to access only non-symmetric entries of 4th order sym. tensor
 	// ToDo: still not optimal element 1112 and 1211 are both accessed
 	for ( unsigned int i=0; i<dim; ++i )
