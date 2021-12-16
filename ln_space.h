@@ -197,6 +197,7 @@ void ln_space<dim>::pre_ln ( /*input->*/ const Tensor<2,3> &F /*output->hencky_s
 	 }
 
 	// Compute the Hencky strain
+	 hencky_strain_3D = 0.;
 	 for (unsigned int a = 0; a < 3; ++a)
 		hencky_strain_3D += ea(a) * eigenbasis[a];
 
